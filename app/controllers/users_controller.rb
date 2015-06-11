@@ -3,4 +3,8 @@ class UsersController < ApplicationController
 		@users = User.all
 	end
 
+	def show
+		#@user.find_by(params[:id])
+	end
+
 end
