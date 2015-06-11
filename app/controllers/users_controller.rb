@@ -4,7 +4,8 @@ class UsersController < ApplicationController
 	end
 
 	def show
-		#@user.find_by(params[:id])
+		@user.find(params[:id])
+		render json: @user
 	end
 
 end
