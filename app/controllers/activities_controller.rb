@@ -1,6 +1,7 @@
 class ActivitiesController < ApplicationController
 	def index
-		@activities = Activities.all
+		@activities = Activity.all
+		render json: @activities
 	end
 
 	def show
