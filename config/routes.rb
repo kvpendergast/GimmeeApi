@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :users, :products, :suppliers, :activities
 
+  get '/users/:id/activities', to: 'activities#show'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
