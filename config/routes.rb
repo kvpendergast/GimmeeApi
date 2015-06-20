@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :users, :products, :suppliers, :activities
+  resources :users, :products, :suppliers, :activities, :friendships
 
   get '/users/:id/activities', to: 'activities#show'
 

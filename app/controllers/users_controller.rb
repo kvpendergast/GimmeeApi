@@ -9,4 +9,8 @@ class UsersController < ApplicationController
 		render json: @user
 	end
 
+	def friends
+		@friends = User.find(params[:id]).friendships.all
+	end
+
 end
