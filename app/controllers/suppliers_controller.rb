@@ -6,6 +6,6 @@ class SuppliersController < ApplicationController
 
 	def show
 		@supplier = Supplier.find(params[:id])
-		render json: => @supplier.to_json(:include => [:products])
+		render json: @supplier.to_json(:include => [:products])
 	end
 end
