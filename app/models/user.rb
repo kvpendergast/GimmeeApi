@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+	has_one :productqueue
 	has_many :activities
 
 	has_many :friendships

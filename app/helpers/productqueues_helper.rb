@@ -1,0 +1,2 @@
+module ProductqueuesHelper
+end

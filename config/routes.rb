@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :users, :products, :suppliers, :activities, :friendships
-
+  resources :users, :products, :suppliers, :activities, :friendships, :productqueues
+  
   get '/users/:id/activities', to: 'activities#show'
+  get '/users/:id/productqueues', to: 'users#productqueue'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
