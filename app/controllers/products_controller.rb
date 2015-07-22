@@ -1,8 +1,4 @@
 class ProductsController < ApplicationController
-	require 'openssl'
-	require 'base64'
-	require 'rest-client'
-	require 'Nokogiri'
 
 	def index
 		@products = Product.all
