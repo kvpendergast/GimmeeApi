@@ -57,6 +57,10 @@ ActiveRecord::Schema.define(version: 20150718205633) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "temp_products", id: false, force: :cascade do |t|
+    t.text "externalid"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string   "firstName"
     t.string   "lastName"
