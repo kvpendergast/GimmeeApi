@@ -17,71 +17,74 @@ class ProductqueuesController < ApplicationController
 		end
 
 		$count = 0
-		asins = Array.new
-		newProductIds = Array.new
+		requestAsins = Array.new
 		@randomProduct = nil
 		Product.uncached do
-			until $count > 10 do
-
+			until $count >= 10 do
 				@randomProduct = Product.order("RANDOM()").first
-				asins.push(@randomProduct.externalId)
-				@productqueue.productids.push(@randomProduct.id)
-				newProductIds.push(@randomProduct.id)
+				requestAsins.push(@randomProduct.externalId)
 				$count += 1
-
 			end
 		end
-
-		#render json: asins
 
 		@apitag = "ventry-20"
 		@op = "ItemLookup"
 		@RespGroup = "Images%2COffers%2CSmall"
 		@serv = "AWSECommerceService"
-		response = amazonSignature(asins, @apitag, @op, @RespGroup, @serv)
-		product_titles = Nokogiri.XML(response).xpath("//xmlns:Title")
-		product_prices = Nokogiri.XML(response).xpath("//xmlns:FormattedPrice")
-		product_large_images = Nokogiri.XML(response).xpath("//xmlns:LargeImage")
-		#render xml: response
-
+		response = amazonSignature(requestAsins, @apitag, @op, @RespGroup, @serv)
+		responseProductTitles = Nokogiri.XML(response).xpath("//xmlns:Title")
+		responseTotalOffers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
+		responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
+		responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
+		responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
+		
 		$count = 0
+		$priceCount = 0
 
-		until $count > 10
-			@randomProduct = Product.find(newProductIds[$count])
-			@randomProduct.productName = product_titles[$count].to_s.sub("<Title>","").sub("</Title>","")
-			@randomProduct.price = product_prices[$count].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","").to_f
-			#Product.find(newProductIds[$count]).productName = product_titles[$count]
-			@randomProduct.save
+		cleanedresponseProductTitles = Array.new
+		cleanedresponseAsins = Array.new
+		cleanedresponseTotalOffers = Array.new
+		cleanedresponsedetailpageURLs = Array.new
+		cleanedresponsePrices = Array.new
+		currentProduct = nil
+		#This loop removes the tags in the responseProductTitles, responseAins, and responseTotalOffers arrays
+		until $count >= responseProductTitles.length
+			cleanedresponseAsins[$count] = responseAsins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
+			currentProduct = Product.find_by_externalId(cleanedresponseAsins[$count])
+
+			cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
+			currentProduct.productName = cleanedresponseProductTitles[$count]
+
+			cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL","").sub("</DetailPageURL>","")
+			currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
+
+			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
+			logger.info cleanedresponseTotalOffers[$count]
+			if cleanedresponseTotalOffers[$count] > 0
+				logger.info "Entered loop"
+				cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
+				currentProduct.price = cleanedresponsePrices[$priceCount]
+				logger.info cleanedresponsePrices[$priceCount]
+				@productqueue.productids.push(currentProduct.id)
+				$priceCount += 1
+			else
+				currentProduct.price = "Not Available"
+				logger.info "Not Available"
+			end
 			$count += 1
+			currentProduct.save
+			
 		end
-		#@product_price = Nokogiri.XML(@test_product).xpath("//xmlns:FormattedPrice").first.text
-		#randomProduct.productName = @product_title
-		#@randomProduct.price = @product_price
-		@productqueue.save
-		render json: @productqueue
-		#render json: @productqueue
-		#@randomProduct.save
 
+		logger.info responsePrices
+		logger.info cleanedresponsePrices
+		logger.info @productqueue.productids
+
+		render xml: response
 	end
 
 	def addproductstoqueue
 		
-		@productqueue = Productqueue.find(params[:id])
-		@randomProduct = Product.order("RANDOM()").first
-		@asin = @randomProduct.externalId
-		@apitag = "ventry-20"
-		@op = "ItemLookup"
-		@RespGroup = "Images%2COffers%2CSmall"
-		@serv = "AWSECommerceService"
-		@test_product = amazonSignature(@asin, @apitag, @op, @RespGroup, @serv)
-		@product_title = Nokogiri.XML(@test_product).xpath("//xmlns:Title").first
-		#@product_price = Nokogiri.XML(@test_product).xpath("//xmlns:FormattedPrice").first.text
-		@randomProduct.productName = @product_title
-		#@randomProduct.price = @product_price
-		@productqueue.productids.push(@randomProduct.id)
-		@productqueue.save
-		@randomProduct.save
-
 	end
 
 private
