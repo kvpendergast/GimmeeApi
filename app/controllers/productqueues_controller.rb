@@ -1,6 +1,8 @@
 class ProductqueuesController < ApplicationController
 
 	def index
+		@productqueues = Productqueue.all
+		render json: @productqueues
 	end
 
 	def show
@@ -76,11 +78,13 @@ class ProductqueuesController < ApplicationController
 			
 		end
 
+		@productqueue.save
+
 		logger.info responsePrices
 		logger.info cleanedresponsePrices
 		logger.info @productqueue.productids
 
-		#render xml: response
+		render xml: response
 	end
 
 	def addproductstoqueue
