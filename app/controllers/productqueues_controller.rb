@@ -80,7 +80,7 @@ class ProductqueuesController < ApplicationController
 		logger.info cleanedresponsePrices
 		logger.info @productqueue.productids
 
-		render xml: response
+		#render xml: response
 	end
 
 	def addproductstoqueue
