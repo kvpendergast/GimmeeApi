@@ -39,6 +39,9 @@ class ProductqueuesController < ApplicationController
 		responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
 		responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
 		responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
+		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:LargeImage/xmlns:URL")
+
+		logger.info responseLargeImageUrls
 		
 		$count = 0
 		$priceCount = 0
@@ -48,6 +51,7 @@ class ProductqueuesController < ApplicationController
 		cleanedresponseTotalOffers = Array.new
 		cleanedresponsedetailpageURLs = Array.new
 		cleanedresponsePrices = Array.new
+		cleanedresponseLargeImageUrls = Array.new
 		currentProduct = nil
 		#This loop removes the tags in the responseProductTitles, responseAins, and responseTotalOffers arrays
 		until $count >= responseProductTitles.length
@@ -60,13 +64,14 @@ class ProductqueuesController < ApplicationController
 			cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
 			currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
 
+			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
+			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
+
 			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 			logger.info cleanedresponseTotalOffers[$count]
 			if cleanedresponseTotalOffers[$count] > 0
-				logger.info "Entered loop"
 				cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
 				currentProduct.price = cleanedresponsePrices[$priceCount]
-				logger.info cleanedresponsePrices[$priceCount]
 				@productqueue.productids.push(currentProduct.id)
 				$priceCount += 1
 			else
@@ -80,11 +85,7 @@ class ProductqueuesController < ApplicationController
 
 		@productqueue.save
 
-		logger.info responsePrices
-		logger.info cleanedresponsePrices
-		logger.info @productqueue.productids
-
-		render xml: response
+		render json: @productqueue
 	end
 
 	def addproductstoqueue
