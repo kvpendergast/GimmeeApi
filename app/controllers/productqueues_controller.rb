@@ -39,6 +39,7 @@ class ProductqueuesController < ApplicationController
 		responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
 		responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
 		responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
+		#Pull image by ImageSet not LargeImage
 		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:LargeImage/xmlns:URL")
 
 		logger.info responseLargeImageUrls
@@ -85,11 +86,23 @@ class ProductqueuesController < ApplicationController
 
 		@productqueue.save
 
-		render json: @productqueue
+		render xml: response
 	end
 
 	def addproductstoqueue
-		
+		@productqueue = Productqueue.find(params[:id])
+		randomProduct = nil
+		requestAsins = Array.new
+
+		$count = 0
+		Product.uncached do 
+			until $count >= 10 do
+				randomProduct = Product.order("RANDOM()").first
+				requestAsins.push(randomProduct.externalId)
+				$count += 1
+			end
+		end
+
 	end
 
 private
