@@ -40,7 +40,8 @@ class ProductqueuesController < ApplicationController
 		responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
 		responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
 		#Pull image by ImageSet not LargeImage
-		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:LargeImage/xmlns:URL")
+		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
+		#responseLargeImageUrlsNodes = Nokogiri.XML(responseLargeImageUrlsNodeSets).xpath("//xmlns:ImageSet")
 
 		logger.info responseLargeImageUrls
 		
@@ -65,6 +66,7 @@ class ProductqueuesController < ApplicationController
 			cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
 			currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
 
+			#logger.info responseLargeImageUrls[$count]
 			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
 
