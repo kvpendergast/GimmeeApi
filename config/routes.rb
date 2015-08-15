@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   
   get '/users/:id/activities', to: 'activities#show'
   get '/users/:id/productqueues', to: 'users#productqueue'
+  get '/productqueues/addproducts/:id', to: 'productqueues#addproductstoqueue'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
