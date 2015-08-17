@@ -67,6 +67,7 @@ class ProductqueuesController < ApplicationController
 			#logger.info responseLargeImageUrls[$count]
 			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
+			logger.info currentProduct.imageurl
 
 			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 			logger.info cleanedresponseTotalOffers[$count]
@@ -85,7 +86,8 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			render json: @productqueue, status: 201, location: @productqueue
+			#render json: @productqueue, status: 201, location: @productqueue
+			render xml: response
 		end
 	end
 
@@ -137,6 +139,7 @@ class ProductqueuesController < ApplicationController
 
 			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
+			logger.info currentProduct.imageurl
 
 			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 			logger.info cleanedresponseTotalOffers[$count]
@@ -155,7 +158,8 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			render json: @productqueue, status: 201, location: @productqueue
+			#render json: @productqueue, status: 201, location: @productqueue
+			render xml: response
 		end
 
 	end
