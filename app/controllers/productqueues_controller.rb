@@ -40,8 +40,6 @@ class ProductqueuesController < ApplicationController
 		#Pull image by ImageSet not LargeImage
 		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
 		#responseLargeImageUrlsNodes = Nokogiri.XML(responseLargeImageUrlsNodeSets).xpath("//xmlns:ImageSet")
-
-		logger.info responseLargeImageUrls
 		
 		$count = 0
 		$priceCount = 0
@@ -67,7 +65,6 @@ class ProductqueuesController < ApplicationController
 			#logger.info responseLargeImageUrls[$count]
 			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
-			logger.info currentProduct.imageurl
 
 			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 			logger.info cleanedresponseTotalOffers[$count]
@@ -86,8 +83,7 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			#render json: @productqueue, status: 201, location: @productqueue
-			render xml: response
+			render json: @productqueue, status: 201, location: @productqueue
 		end
 	end
 
@@ -139,7 +135,6 @@ class ProductqueuesController < ApplicationController
 
 			cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 			currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
-			logger.info currentProduct.imageurl
 
 			cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 			logger.info cleanedresponseTotalOffers[$count]
@@ -158,8 +153,7 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			#render json: @productqueue, status: 201, location: @productqueue
-			render xml: response
+			render json: @productqueue, status: 201, location: @productqueue
 		end
 
 	end
