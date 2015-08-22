@@ -10,13 +10,15 @@ class ActivitiesController < ApplicationController
 	end
 
 	def create
-		@user = User.find(params[create_activity_params])
-		product_attributes = Product.find(params[:id])
-		Activity.create(product_attributes, user_id: @user.id)
+		@activity = Activity.create(activity_params)
+		if @activity.save
+			render json: true, status: 200
+		end
+
 	end
 
 	private
-		def create_activity_params
-			params.require(:activity).permit(:user_id)
+		def activity_params
+			params.require(:activity).permit(:user_id, :product_id, :purchased, :viewTime, :productName, :price, :imageurl, :externalid, :detailPageUrl, :supplier_id)
 		end
 end

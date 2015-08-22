@@ -39,7 +39,7 @@ class ProductqueuesController < ApplicationController
 		responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
 		#Pull image by ImageSet not LargeImage
 		responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-		#responseLargeImageUrlsNodes = Nokogiri.XML(responseLargeImageUrlsNodeSets).xpath("//xmlns:ImageSet")
+		logger.info responseLargeImageUrls
 		
 		$count = 0
 		$priceCount = 0
@@ -153,7 +153,7 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			render json: @productqueue, status: 201, location: @productqueue
+			render json: @productqueue, status: 200, location: @productqueue
 		end
 
 	end

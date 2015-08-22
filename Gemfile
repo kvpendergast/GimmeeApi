@@ -36,6 +36,8 @@ gem 'rest-client', '~> 1.8.0'
 
 gem 'json', '~> 1.8.3'
 
+gem 'pry-rails', :group => :development
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
