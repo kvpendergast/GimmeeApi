@@ -12,7 +12,7 @@ class ActivitiesController < ApplicationController
 	def create
 		@activity = Activity.create(activity_params)
 		if @activity.save
-			render json: true, status: 200
+			render json: @activity.id, status: 200
 		end
 
 	end
