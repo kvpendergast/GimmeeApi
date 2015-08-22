@@ -14,7 +14,6 @@ class ProductqueuesController < ApplicationController
 
 	def create
 		@productqueue = Productqueue.new(create_productqueue_params)
-		
 
 		$count = 0
 		requestAsins = Array.new
@@ -53,6 +52,7 @@ class ProductqueuesController < ApplicationController
 		currentProduct = nil
 		#This loop removes the tags in the responseProductTitles, responseAins, and responseTotalOffers arrays
 		until $count >= responseProductTitles.length
+			logger.info "Yes"
 			cleanedresponseAsins[$count] = responseAsins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
 			currentProduct = Product.find_by_externalId(cleanedresponseAsins[$count])
 
@@ -84,6 +84,7 @@ class ProductqueuesController < ApplicationController
 
 		if @productqueue.save
 			render json: @productqueue, status: 201, location: @productqueue
+			#render xml: response
 		end
 	end
 
@@ -123,6 +124,7 @@ class ProductqueuesController < ApplicationController
 		cleanedresponsePrices = Array.new
 		cleanedresponseLargeImageUrls = Array.new
 		currentProduct = nil
+		newProductIds = Array.new
 		until $count >= responseProductTitles.length
 			cleanedresponseAsins[$count] = responseAsins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
 			currentProduct = Product.find_by_externalId(cleanedresponseAsins[$count])
@@ -141,6 +143,7 @@ class ProductqueuesController < ApplicationController
 			if cleanedresponseTotalOffers[$count] > 0
 				cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
 				currentProduct.price = cleanedresponsePrices[$priceCount]
+				newProductIds.push(currentProduct.id)
 				@productqueue.productids.push(currentProduct.id)
 				$priceCount += 1
 			else
@@ -153,7 +156,8 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			render json: @productqueue, status: 200, location: @productqueue
+			#render json: id: @productqueue.id, user_id: @productqueue.user_id, created_at: current_date, updated_at: current_date, newProductIds: newProductIds, status: 200, location: @productqueue
+			render json: newProductIds, status: 201, location: @productqueue
 		end
 
 	end

@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
 
 def amazonSignature(itemIds, associateTag, operation, responseGroup, service)
-	associateTag = ""
+	associateTag = "Ventry-20"
 	@accesskey = "AKIAIHMGKYWGXDTROKMA"
 	@currentdate = (Date.today + 1).to_s
 	@timestamp = @currentdate << "T19%3A37%3A00Z"
