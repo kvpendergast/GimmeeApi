@@ -155,9 +155,16 @@ class ProductqueuesController < ApplicationController
 			
 		end
 
+		updatedQueueHash = Hash.new
+		updatedQueueHash["id"] = @productqueue.id
+		updatedQueueHash["user_id"] = @productqueue.user_id
+		updatedQueueHash["created_at"] = Time.now
+		updatedQueueHash["updated_at"] = Time.now
+		updatedQueueHash["productids"] = newProductIds
+
 		if @productqueue.save
 			#render json: id: @productqueue.id, user_id: @productqueue.user_id, created_at: current_date, updated_at: current_date, newProductIds: newProductIds, status: 200, location: @productqueue
-			render json: newProductIds, status: 201, location: @productqueue
+			render json: updatedQueueHash, status: 200, location: @productqueue
 		end
 
 	end
