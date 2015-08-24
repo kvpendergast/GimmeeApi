@@ -93,6 +93,7 @@ class ProductqueuesController < ApplicationController
 		if @productqueue.save
 			render json: @productqueue, status: 201, location: @productqueue
 			#render xml: response
+			logger.info response
 		end
 	end
 
