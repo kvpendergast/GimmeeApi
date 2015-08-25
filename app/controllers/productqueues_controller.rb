@@ -74,6 +74,7 @@ class ProductqueuesController < ApplicationController
 
 				cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
 				currentProduct.productName = cleanedresponseProductTitles[$count]
+				logger.info currentProduct.productName
 
 				cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
 				currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
