@@ -48,6 +48,12 @@ class ProductqueuesController < ApplicationController
 			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
 			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
+			logger.info "break"
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			logger.info "break"
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+
 			$count = 0
 			$priceCount = 0
 
@@ -135,6 +141,12 @@ class ProductqueuesController < ApplicationController
 			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
 			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
 			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
+			logger.info "break"
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			logger.info "break"
+			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
 			$count = 0
 			$priceCount = 0
