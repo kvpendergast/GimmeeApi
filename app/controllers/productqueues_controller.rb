@@ -45,14 +45,14 @@ class ProductqueuesController < ApplicationController
 			responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
 			responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
 			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
+			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
-			logger.info "break"
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
-			logger.info "break"
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
+			#logger.info "break"
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			#logger.info "break"
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
 			$count = 0
 			$priceCount = 0
@@ -80,7 +80,7 @@ class ProductqueuesController < ApplicationController
 				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
 
 				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
-				logger.info cleanedresponseTotalOffers[$count]
+				#logger.info cleanedresponseTotalOffers[$count]
 				if cleanedresponseTotalOffers[$count] > 0
 					cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
 					currentProduct.price = cleanedresponsePrices[$priceCount]
@@ -139,14 +139,14 @@ class ProductqueuesController < ApplicationController
 			responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
 			responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
 			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
+			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
-			logger.info "break"
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
-			logger.info "break"
-			logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
+			#logger.info "break"
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			#logger.info "break"
+			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
 			$count = 0
 			$priceCount = 0
@@ -172,7 +172,7 @@ class ProductqueuesController < ApplicationController
 				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
 
 				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
-				logger.info cleanedresponseTotalOffers[$count]
+				#logger.info cleanedresponseTotalOffers[$count]
 				if cleanedresponseTotalOffers[$count] > 0
 					cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
 					currentProduct.price = cleanedresponsePrices[$priceCount]
@@ -197,7 +197,7 @@ class ProductqueuesController < ApplicationController
 		updatedQueueHash["updated_at"] = Time.now
 		updatedQueueHash["productids"] = newProductIds
 
-		logger.info newProductIds
+		#logger.info newProductIds
 
 		if @productqueue.save
 			render json: updatedQueueHash, status: 200, location: @productqueue
