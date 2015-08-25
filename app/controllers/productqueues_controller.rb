@@ -93,7 +93,7 @@ class ProductqueuesController < ApplicationController
 		if @productqueue.save
 			render json: @productqueue, status: 201, location: @productqueue
 			#render xml: response
-			logger.info response
+			#logger.info response
 		end
 	end
 
@@ -112,11 +112,13 @@ class ProductqueuesController < ApplicationController
 		newProductIds = Array.new
 		until newProductIds.length >= 20
 			$count = 0
+			requestAsins.clear
 			Product.uncached do 
 				until $count >= 10 do
 					randomProduct = Product.order("RANDOM()").first
 					requestAsins.push(randomProduct.externalId)
 					$count += 1
+					logger.info randomProduct.id
 				end
 			end
 
@@ -181,8 +183,11 @@ class ProductqueuesController < ApplicationController
 		updatedQueueHash["updated_at"] = Time.now
 		updatedQueueHash["productids"] = newProductIds
 
+		logger.info newProductIds
+
 		if @productqueue.save
 			render json: updatedQueueHash, status: 200, location: @productqueue
+			#render xml: response
 		end
 
 	end

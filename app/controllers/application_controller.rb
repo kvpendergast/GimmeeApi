@@ -14,7 +14,7 @@ def amazonSignature(itemIds, associateTag, operation, responseGroup, service)
 	@signature.gsub!(',','%2C')
 
 	@response = RestClient.get "http://webservices.amazon.com/onca/xml?AWSAccessKeyId=#{@accesskey}&AssociateTag=#{associateTag}&ItemId=#{itemIds[0]}%2C#{itemIds[1]}%2C#{itemIds[2]}%2C#{itemIds[3]}%2C#{itemIds[4]}%2C#{itemIds[5]}%2C#{itemIds[6]}%2C#{itemIds[7]}%2C#{itemIds[8]}%2C#{itemIds[9]}&Operation=#{operation}&ResponseGroup=#{responseGroup}&Service=#{service}&Timestamp=#{@timestamp}&Signature=#{@signature}"
-
+	
 	return @response
 end
   # Prevent CSRF attacks by raising an exception.
