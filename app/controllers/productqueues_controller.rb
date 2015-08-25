@@ -102,8 +102,8 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			#render json: @productqueue, status: 201, location: @productqueue
-			render xml: response
+			render json: @productqueue, status: 201, location: @productqueue
+			#render xml: response
 			#logger.info response
 		end
 	end
@@ -200,8 +200,8 @@ class ProductqueuesController < ApplicationController
 		updatedQueueHash["productids"] = newProductIds
 
 		if @productqueue.save
-			#render json: updatedQueueHash, status: 200, location: @productqueue
-			render xml: response
+			render json: updatedQueueHash, status: 200, location: @productqueue
+			#render xml: response
 		end
 
 	end
