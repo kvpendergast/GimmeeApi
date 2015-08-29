@@ -35,7 +35,6 @@ class ProductqueuesController < ApplicationController
 				end
 			end
 
-			@apitag = "ventry-20"
 			@op = "ItemLookup"
 			@RespGroup = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
@@ -47,15 +46,7 @@ class ProductqueuesController < ApplicationController
 			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
 			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
 			responseLargeImageUrls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")	
-			logger.info responseProductTitles.length
-			logger.info responseLargeImageUrls.length
 			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
-
-			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets")
-			#logger.info "break"
-			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
-			#logger.info "break"
-			#logger.info Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
 			$count = 0
 			$priceCount = 0
@@ -74,15 +65,12 @@ class ProductqueuesController < ApplicationController
 
 				cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
 				currentProduct.productName = cleanedresponseProductTitles[$count]
-				logger.info currentProduct.productName
 
 				cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
 				currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
 
 				cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
-				logger.info responseLargeImageUrls_v2[$count]
-				logger.info currentProduct.imageurl
 
 				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 				#logger.info cleanedresponseTotalOffers[$count]
@@ -131,7 +119,7 @@ class ProductqueuesController < ApplicationController
 				end
 			end
 
-			@apitag = "ventry-20"
+			#@apitag = "ventry-20"
 			@op = "ItemLookup"
 			@RespGroup = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
@@ -160,15 +148,12 @@ class ProductqueuesController < ApplicationController
 
 				cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
 				currentProduct.productName = cleanedresponseProductTitles[$count]
-				logger.info currentProduct.productName
 
 				cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
 				currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
 
 				cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
 				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
-				logger.info responseLargeImageUrls_v2[$count]
-				logger.info currentProduct.imageurl
 
 				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 
@@ -185,10 +170,6 @@ class ProductqueuesController < ApplicationController
 				currentProduct.save
 			
 			end
-
-			logger.info cleanedresponseProductTitles.length
-			logger.info responseLargeImageUrls.length
-			logger.info cleanedresponseLargeImageUrls.length
 
 		#end
 
