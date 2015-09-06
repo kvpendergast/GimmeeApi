@@ -15,75 +15,75 @@ class ProductqueuesController < ApplicationController
 	def create
 		@productqueue = Productqueue.new(create_productqueue_params)
 
-		requestAsins = Array.new
-		cleanedresponseProductTitles = Array.new
-		cleanedresponseAsins = Array.new
-		cleanedresponseTotalOffers = Array.new
-		cleanedresponsedetailpageURLs = Array.new
-		cleanedresponsePrices = Array.new
-		cleanedresponseLargeImageUrls = Array.new
+		request_asins = Array.new
+		cleaned_response_product_titles = Array.new
+		cleaned_response_asins = Array.new
+		cleaned_response_total_offers = Array.new
+		cleaned_response_detail_page_urls = Array.new
+		cleaned_response_prices = Array.new
+		cleaned_response_large_image_urls = Array.new
 		
 		until @productqueue.productids.length >= 50
 			$count = 0
-			requestAsins.clear
-			@randomProduct = nil
+			request_asins.clear
+			random_product = nil
 			Product.uncached do
 				until $count >= 10 do
-					@randomProduct = Product.order("RANDOM()").first
-					requestAsins.push(@randomProduct.externalId)
+					random_product = Product.order("RANDOM()").first
+					request_asins.push(random_product.externalId)
 					$count += 1
 				end
 			end
 
 			@op = "ItemLookup"
-			@RespGroup = "Images%2COffers%2CSmall"
+			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = amazonSignature(requestAsins, @apitag, @op, @RespGroup, @serv)
-			responseProductTitles = Nokogiri.XML(response).xpath("//xmlns:Title")
-			responseTotalOffers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
-			responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
-			responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
-			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			responseLargeImageUrls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")	
+			response = amazonSignature(request_asins, @apitag, @op, @resp_group, @serv)
+			response_product_titles = Nokogiri.XML(response).xpath("//xmlns:Title")
+			response_total_offers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
+			response_prices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
+			response_asins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
+			response_detail_page_urls = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
+			response_large_image_urls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
+			response_large_image_urls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")	
 			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
 
 			$count = 0
-			$priceCount = 0
+			$price_count = 0
 
-			cleanedresponseProductTitles.clear
-			cleanedresponseAsins.clear
-			cleanedresponseTotalOffers.clear
-			cleanedresponsedetailpageURLs.clear
-			cleanedresponsePrices.clear
-			cleanedresponseLargeImageUrls.clear
-			currentProduct = nil
+			cleaned_response_product_titles.clear
+			cleaned_response_asins.clear
+			cleaned_response_total_offers.clear
+			cleaned_response_detail_page_urls.clear
+			cleaned_response_prices.clear
+			cleaned_response_large_image_urls.clear
+			current_product = nil
 			#This loop removes the tags in the responseProductTitles, responseAins, and responseTotalOffers arrays
-			until $count >= responseProductTitles.length
-				cleanedresponseAsins[$count] = responseAsins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
-				currentProduct = Product.find_by_externalId(cleanedresponseAsins[$count])
+			until $count >= response_product_titles.length
+				cleaned_response_asins[$count] = response_asins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
+				current_product = Product.find_by_externalId(cleaned_response_asins[$count])
 
-				cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
-				currentProduct.productName = cleanedresponseProductTitles[$count]
+				cleaned_response_product_titles[$count] = response_product_titles[$count].to_s.sub("<Title>","").sub("</Title>","")
+				current_product.productName = cleaned_response_product_titles[$count]
 
-				cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
-				currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
+				cleaned_response_detail_page_urls[$count] = response_detail_page_urls[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
+				current_product.detailPageUrl = cleaned_response_detail_page_urls[$count]
 
-				cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
-				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
+				cleaned_response_large_image_urls[$count] = response_large_image_urls[$count].to_s.sub("<URL>","").sub("</URL>","")
+				current_product.imageurl = cleaned_response_large_image_urls[$count]
 
-				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
+				cleaned_response_total_offers[$count] = response_total_offers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 				#logger.info cleanedresponseTotalOffers[$count]
-				if cleanedresponseTotalOffers[$count] > 0
-					cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
-					currentProduct.price = cleanedresponsePrices[$priceCount]
-					@productqueue.productids.push(currentProduct.id)
-					$priceCount += 1
+				if cleaned_response_total_offers[$count] > 0
+					cleaned_response_prices[$price_count] = response_prices[$price_count].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
+					current_product.price = cleaned_response_prices[$price_count]
+					@productqueue.productids.push(current_product.id)
+					$price_count += 1
 				else
-					currentProduct.price = "Not Available"
+					current_product.price = "Not Available"
 				end
 					$count += 1
-					currentProduct.save
+					current_product.save
 			
 			end
 
@@ -98,90 +98,90 @@ class ProductqueuesController < ApplicationController
 
 	def addproductstoqueue
 		@productqueue = Productqueue.find(params[:id])
-		randomProduct = nil
-		requestAsins = Array.new
+		random_product = nil
+		request_asins = Array.new
 
-		cleanedresponseProductTitles = Array.new
-		cleanedresponseAsins = Array.new
-		cleanedresponseTotalOffers = Array.new
-		cleanedresponsedetailpageURLs = Array.new
-		cleanedresponsePrices = Array.new
-		cleanedresponseLargeImageUrls = Array.new
-		newProductIds = Array.new
+		cleaned_response_product_titles = Array.new
+		cleaned_response_asins = Array.new
+		cleaned_response_total_offers = Array.new
+		cleaned_response_detail_page_urls = Array.new
+		cleaned_response_prices = Array.new
+		cleaned_response_large_image_urls = Array.new
+		new_product_ids = Array.new
 		#until newProductIds.length >= 20
 			$count = 0
-			requestAsins.clear
+			request_asins.clear
 			Product.uncached do 
 				until $count >= 10 do
-					randomProduct = Product.order("RANDOM()").first
-					requestAsins.push(randomProduct.externalId)
+					random_product = Product.order("RANDOM()").first
+					request_asins.push(random_product.externalId)
 					$count += 1
 				end
 			end
 
 			#@apitag = "ventry-20"
 			@op = "ItemLookup"
-			@RespGroup = "Images%2COffers%2CSmall"
+			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = amazonSignature(requestAsins, @apitag, @op, @RespGroup, @serv)
-			responseProductTitles = Nokogiri.XML(response).xpath("//xmlns:Title")
-			responseTotalOffers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
-			responsePrices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
-			responseAsins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
-			responsedetailpageURLs = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			responseLargeImageUrls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			response = amazonSignature(request_asins, @apitag, @op, @resp_group, @serv)
+			response_product_titles = Nokogiri.XML(response).xpath("//xmlns:Title")
+			response_total_offers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
+			response_prices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
+			response_asins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
+			response_detail_page_urls = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
+			response_large_image_urls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
+			response_large_image_urls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
 
 			$count = 0
-			$priceCount = 0
+			$price_count = 0
 
-			cleanedresponseProductTitles.clear
-			cleanedresponseAsins.clear
-			cleanedresponseTotalOffers.clear
-			cleanedresponsedetailpageURLs.clear
-			cleanedresponsePrices.clear
-			cleanedresponseLargeImageUrls.clear
-			currentProduct = nil
-			until $count >= responseProductTitles.length
-				cleanedresponseAsins[$count] = responseAsins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
-				currentProduct = Product.find_by_externalId(cleanedresponseAsins[$count])
+			cleaned_response_product_titles.clear
+			cleaned_response_asins.clear
+			cleaned_response_total_offers.clear
+			cleaned_response_detail_page_urls.clear
+			cleaned_response_prices.clear
+			cleaned_response_large_image_urls.clear
+			current_product = nil
+			until $count >= response_product_titles.length
+				cleaned_response_asins[$count] = response_asins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
+				current_product = Product.find_by_externalId(cleaned_response_asins[$count])
 
-				cleanedresponseProductTitles[$count] = responseProductTitles[$count].to_s.sub("<Title>","").sub("</Title>","")
-				currentProduct.productName = cleanedresponseProductTitles[$count]
+				cleaned_response_product_titles[$count] = response_product_titles[$count].to_s.sub("<Title>","").sub("</Title>","")
+				current_product.productName = cleaned_response_product_titles[$count]
 
-				cleanedresponsedetailpageURLs[$count] = responsedetailpageURLs[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
-				currentProduct.detailPageUrl = cleanedresponsedetailpageURLs[$count]
+				cleaned_response_detail_page_urls[$count] = response_detail_page_urls[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
+				current_product.detailPageUrl = cleaned_response_detail_page_urls[$count]
 
-				cleanedresponseLargeImageUrls[$count] = responseLargeImageUrls[$count].to_s.sub("<URL>","").sub("</URL>","")
-				currentProduct.imageurl = cleanedresponseLargeImageUrls[$count]
+				cleaned_response_large_image_urls[$count] = response_large_image_urls[$count].to_s.sub("<URL>","").sub("</URL>","")
+				current_product.imageurl = cleaned_response_large_image_urls[$count]
 
-				cleanedresponseTotalOffers[$count] = responseTotalOffers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
+				cleaned_response_total_offers[$count] = response_total_offers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
 
-				if cleanedresponseTotalOffers[$count] > 0
-					cleanedresponsePrices[$priceCount] = responsePrices[$priceCount].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
-					currentProduct.price = cleanedresponsePrices[$priceCount]
-					newProductIds.push(currentProduct.id)
-					@productqueue.productids.push(currentProduct.id)
-					$priceCount += 1
+				if cleaned_response_total_offers[$count] > 0
+					cleaned_response_prices[$price_count] = response_prices[$price_count].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
+					current_product.price = cleaned_response_prices[$price_count]
+					new_product_ids.push(current_product.id)
+					@productqueue.productids.push(current_product.id)
+					$price_count += 1
 				else
-					currentProduct.price = "Not Available"
+					current_product.price = "Not Available"
 				end
 				$count += 1
-				currentProduct.save
+				current_product.save
 			
 			end
 
 		#end
 
-		updatedQueueHash = Hash.new
-		updatedQueueHash["id"] = @productqueue.id
-		updatedQueueHash["user_id"] = @productqueue.user_id
-		updatedQueueHash["created_at"] = Time.now
-		updatedQueueHash["updated_at"] = Time.now
-		updatedQueueHash["productids"] = newProductIds
+		updated_queue_hash = Hash.new
+		updated_queue_hash["id"] = @productqueue.id
+		updated_queue_hash["user_id"] = @productqueue.user_id
+		updated_queue_hash["created_at"] = Time.now
+		updated_queue_hash["updated_at"] = Time.now
+		updated_queue_hash["productids"] = new_product_ids
 
 		if @productqueue.save
-			render json: updatedQueueHash, status: 200, location: @productqueue
+			render json: updated_queue_hash, status: 200, location: @productqueue
 			#render xml: response
 		end
 
