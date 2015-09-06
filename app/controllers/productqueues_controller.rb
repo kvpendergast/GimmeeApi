@@ -15,18 +15,18 @@ class ProductqueuesController < ApplicationController
 	def create
 		@productqueue = Productqueue.new(create_productqueue_params)
 
-		newProductIds = Array.new
+		new_product_ids = Array.new
 		request_asins = Array.new
 
-		until newProductIds.length >= 50
+		until new_product_ids.length >= 50
 		
 			$count = 0
 			request_asins.clear
-			@randomProduct = nil
+			random_product = nil
 			Product.uncached do
 				until $count >= 10 do
-					@randomProduct = Product.order("RANDOM()").first
-					request_asins.push(@randomProduct.externalId)
+					random_product = Product.order("RANDOM()").first
+					request_asins.push(random_product.externalId)
 					$count += 1
 				end
 			end
@@ -87,7 +87,8 @@ class ProductqueuesController < ApplicationController
 
 				if current_product.price != nil
 				  if current_product.imageurl != nil
-				    newProductIds.push(current_product.id)
+				    new_product_ids.push(current_product.id)
+				    @productqueue.productids.push(current_product.id)
 				  end
 				end
 
@@ -95,8 +96,6 @@ class ProductqueuesController < ApplicationController
 			end
 
 		end
-
-			@productqueue.productids.push(newProductIds)
 
 		if @productqueue.save
 			render json: @productqueue, status: 201, location: @productqueue
@@ -108,18 +107,18 @@ class ProductqueuesController < ApplicationController
 	def addproductstoqueue
 		@productqueue = Productqueue.find(params[:id])
 		
-		newProductIds = Array.new
+		new_product_ids = Array.new
 		request_asins = Array.new
 
-		until newProductIds.length >= 20
+		until new_product_ids.length >= 20
 		
 			$count = 0
 			request_asins.clear
-			@randomProduct = nil
+			random_product = nil
 			Product.uncached do
 				until $count >= 10 do
-					@randomProduct = Product.order("RANDOM()").first
-					request_asins.push(@randomProduct.externalId)
+					random_product = Product.order("RANDOM()").first
+					request_asins.push(random_product.externalId)
 					$count += 1
 				end
 			end
@@ -180,7 +179,8 @@ class ProductqueuesController < ApplicationController
 
 				if current_product.price != nil
 				  if current_product.imageurl != nil
-				    newProductIds.push(current_product.id)
+				    new_product_ids.push(current_product.id)
+				    @productqueue.productids.push(current_product.id)
 				  end
 				end
 
@@ -189,19 +189,25 @@ class ProductqueuesController < ApplicationController
 
 		end
 
-			@productqueue.productids.push(newProductIds)
+		updated_queue_hash = Hash.new
+		updated_queue_hash["id"] = @productqueue.id
+		updated_queue_hash["user_id"] = @productqueue.user_id
+		updated_queue_hash["created_at"] = Time.now
+		updated_queue_hash["updated_at"] = Time.now
+		updated_queue_hash["productids"] = new_product_ids
 
 		if @productqueue.save
-			render json: @productqueue, status: 201, location: @productqueue
-			#render xml: response
-			#logger.info response
+		  #respond_to do |format|
+		  #  format.html
+		  #  format.xml { render :xml => response }
+		  #  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
+		  #end
+		  render json: updated_queue_hash, status: 200, location: @productqueue
 		end
-
 	end
 
 private
 	def create_productqueue_params
 		params.require(:productqueue).permit(:user_id)
 	end
-
 end
