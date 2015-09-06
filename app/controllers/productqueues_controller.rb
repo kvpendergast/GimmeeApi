@@ -15,15 +15,11 @@ class ProductqueuesController < ApplicationController
 	def create
 		@productqueue = Productqueue.new(create_productqueue_params)
 
+		new_product_ids = Array.new
 		request_asins = Array.new
-		cleaned_response_product_titles = Array.new
-		cleaned_response_asins = Array.new
-		cleaned_response_total_offers = Array.new
-		cleaned_response_detail_page_urls = Array.new
-		cleaned_response_prices = Array.new
-		cleaned_response_large_image_urls = Array.new
+
+		until new_product_ids.length >= 50
 		
-		until @productqueue.productids.length >= 50
 			$count = 0
 			request_asins.clear
 			random_product = nil
@@ -35,56 +31,68 @@ class ProductqueuesController < ApplicationController
 				end
 			end
 
+			@apitag = "Ventry-20"
 			@op = "ItemLookup"
 			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = amazonSignature(request_asins, @apitag, @op, @resp_group, @serv)
-			response_product_titles = Nokogiri.XML(response).xpath("//xmlns:Title")
-			response_total_offers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
-			response_prices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
-			response_asins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
-			response_detail_page_urls = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			response_large_image_urls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			response_large_image_urls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")	
-			#responseLargeImageUrls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]/xmlns:URL")
+			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @RespGroup, @serv))
+			response_fragment = Nokogiri::XML.fragment(response)
+			node = Nokogiri::XML::Node.new('my_node', response)
 
-			$count = 0
-			$price_count = 0
+			response_items = node.xpath('//xmlns:Item')
 
-			cleaned_response_product_titles.clear
-			cleaned_response_asins.clear
-			cleaned_response_total_offers.clear
-			cleaned_response_detail_page_urls.clear
-			cleaned_response_prices.clear
-			cleaned_response_large_image_urls.clear
-			current_product = nil
-			#This loop removes the tags in the responseProductTitles, responseAins, and responseTotalOffers arrays
-			until $count >= response_product_titles.length
-				cleaned_response_asins[$count] = response_asins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
-				current_product = Product.find_by_externalId(cleaned_response_asins[$count])
+			titles = Array.new
+			response_items.each do |item|
+				#Parses the product tile and saves it to the product
+				current_product = Product.find_by_externalId(item.search('ASIN').text)
+				current_product.productName = item.search('Title').text
+				logger.info current_product.productName
 
-				cleaned_response_product_titles[$count] = response_product_titles[$count].to_s.sub("<Title>","").sub("</Title>","")
-				current_product.productName = cleaned_response_product_titles[$count]
-
-				cleaned_response_detail_page_urls[$count] = response_detail_page_urls[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
-				current_product.detailPageUrl = cleaned_response_detail_page_urls[$count]
-
-				cleaned_response_large_image_urls[$count] = response_large_image_urls[$count].to_s.sub("<URL>","").sub("</URL>","")
-				current_product.imageurl = cleaned_response_large_image_urls[$count]
-
-				cleaned_response_total_offers[$count] = response_total_offers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
-				#logger.info cleanedresponseTotalOffers[$count]
-				if cleaned_response_total_offers[$count] > 0
-					cleaned_response_prices[$price_count] = response_prices[$price_count].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
-					current_product.price = cleaned_response_prices[$price_count]
-					@productqueue.productids.push(current_product.id)
-					$price_count += 1
+				#parses the product price and saves it to the product
+				offer = item.search('Offers/TotalOffers').text.to_i
+				if offer >= 1
+					sale_price = item.search('Offers/Offer/OfferListing/SalePrice/FormattedPrice').text
+					#checks if a sale price exists. If it does, saves as the product price
+					if sale_price != '' 
+						current_product.price = sale_price
+					else
+						current_price = item.search('Offers/Offer/OfferListing/Price/FormattedPrice').text
+						current_product.price = current_price
+					end
 				else
-					current_product.price = "Not Available"
+					current_product.price = nil
 				end
-					$count += 1
-					current_product.save
-			
+				logger.info current_product.price
+				#Saves the detail_page_url to the product
+				detail_page_url = item.search('DetailPageURL').text
+				current_product.detailPageUrl = detail_page_url
+				logger.info current_product.detailPageUrl
+
+				logger.info '\n'
+
+				logger.info item.search('ImageSets')
+
+				logger.info '\n'
+
+				logger.info item
+
+				if item.search('ImageSets').text != ''
+				  image_url = item.search('ImageSets').children.last.elements.last.search('URL').text
+				  current_product.imageurl = image_url
+				  logger.info current_product.imageurl
+				else
+				  current_product.imageurl = nil
+				  logger.info 'something bad happened'
+				end
+
+				if current_product.price != nil
+				  if current_product.imageurl != nil
+				    new_product_ids.push(current_product.id)
+				    @productqueue.productids.push(current_product.id)
+				  end
+				end
+
+				current_product.save
 			end
 
 		end
@@ -100,80 +108,86 @@ class ProductqueuesController < ApplicationController
 
 	def addproductstoqueue
 		@productqueue = Productqueue.find(params[:id])
-		random_product = nil
+		new_product_ids = Array.new
 		request_asins = Array.new
 
-		cleaned_response_product_titles = Array.new
-		cleaned_response_asins = Array.new
-		cleaned_response_total_offers = Array.new
-		cleaned_response_detail_page_urls = Array.new
-		cleaned_response_prices = Array.new
-		cleaned_response_large_image_urls = Array.new
-		new_product_ids = Array.new
-		#until newProductIds.length >= 20
+		until new_product_ids.length >= 20
+		
 			$count = 0
 			request_asins.clear
-			Product.uncached do 
+			random_product = nil
+			Product.uncached do
 				until $count >= 10 do
 					random_product = Product.order("RANDOM()").first
 					request_asins.push(random_product.externalId)
 					$count += 1
 				end
 			end
-
-			#@apitag = "ventry-20"
+			@apitag = "Ventry-20"
 			@op = "ItemLookup"
 			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = amazonSignature(request_asins, @apitag, @op, @resp_group, @serv)
-			response_product_titles = Nokogiri.XML(response).xpath("//xmlns:Title")
-			response_total_offers = Nokogiri.XML(response).xpath("//xmlns:TotalOffers")
-			response_prices = Nokogiri.XML(response).xpath("//xmlns:Price/xmlns:FormattedPrice")
-			response_asins = Nokogiri.XML(response).xpath("//xmlns:ASIN")
-			response_detail_page_urls = Nokogiri.XML(response).xpath("//xmlns:DetailPageURL")
-			response_large_image_urls = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:LargeImage/xmlns:URL")
-			response_large_image_urls_v2 = Nokogiri.XML(response).xpath("//xmlns:Item/xmlns:ImageSets/xmlns:ImageSet[last()]/xmlns:*[last()]")
+			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @RespGroup, @serv))
+			response_fragment = Nokogiri::XML.fragment(response)
+			node = Nokogiri::XML::Node.new('my_node', response)
 
-			$count = 0
-			$price_count = 0
+			response_items = node.xpath('//xmlns:Item')
 
-			cleaned_response_product_titles.clear
-			cleaned_response_asins.clear
-			cleaned_response_total_offers.clear
-			cleaned_response_detail_page_urls.clear
-			cleaned_response_prices.clear
-			cleaned_response_large_image_urls.clear
-			current_product = nil
-			until $count >= response_product_titles.length
-				cleaned_response_asins[$count] = response_asins[$count].to_s.sub("<ASIN>","").sub("</ASIN>","")
-				current_product = Product.find_by_externalId(cleaned_response_asins[$count])
+			titles = Array.new
+			response_items.each do |item|
+				#Parses the product tile and saves it to the product
+				current_product = Product.find_by_externalId(item.search('ASIN').text)
+				current_product.productName = item.search('Title').text
+				logger.info current_product.productName
 
-				cleaned_response_product_titles[$count] = response_product_titles[$count].to_s.sub("<Title>","").sub("</Title>","")
-				current_product.productName = cleaned_response_product_titles[$count]
-
-				cleaned_response_detail_page_urls[$count] = response_detail_page_urls[$count].to_s.sub("<DetailPageURL>","").sub("</DetailPageURL>","")
-				current_product.detailPageUrl = cleaned_response_detail_page_urls[$count]
-
-				cleaned_response_large_image_urls[$count] = response_large_image_urls[$count].to_s.sub("<URL>","").sub("</URL>","")
-				current_product.imageurl = cleaned_response_large_image_urls[$count]
-
-				cleaned_response_total_offers[$count] = response_total_offers[$count].to_s.sub("<TotalOffers>","").sub("</TotalOffers>","").to_i
-
-				if cleaned_response_total_offers[$count] > 0
-					cleaned_response_prices[$price_count] = response_prices[$price_count].to_s.sub("<FormattedPrice>","").sub("</FormattedPrice>","")
-					current_product.price = cleaned_response_prices[$price_count]
-					new_product_ids.push(current_product.id)
-					@productqueue.productids.push(current_product.id)
-					$price_count += 1
+				#parses the product price and saves it to the product
+				offer = item.search('Offers/TotalOffers').text.to_i
+				if offer >= 1
+					sale_price = item.search('Offers/Offer/OfferListing/SalePrice/FormattedPrice').text
+					#checks if a sale price exists. If it does, saves as the product price
+					if sale_price != '' 
+						current_product.price = sale_price
+					else
+						current_price = item.search('Offers/Offer/OfferListing/Price/FormattedPrice').text
+						current_product.price = current_price
+					end
 				else
-					current_product.price = "Not Available"
+					current_product.price = nil
 				end
-				$count += 1
+				logger.info current_product.price
+				#Saves the detail_page_url to the product
+				detail_page_url = item.search('DetailPageURL').text
+				current_product.detailPageUrl = detail_page_url
+				logger.info current_product.detailPageUrl
+
+				logger.info '\n'
+
+				logger.info item.search('ImageSets')
+
+				logger.info '\n'
+
+				logger.info item
+
+				if item.search('ImageSets').text != ''
+				  image_url = item.search('ImageSets').children.last.elements.last.search('URL').text
+				  current_product.imageurl = image_url
+				  logger.info current_product.imageurl
+				else
+				  current_product.imageurl = nil
+				  logger.info 'something bad happened'
+				end
+
+				if current_product.price != nil
+				  if current_product.imageurl != nil
+				    new_product_ids.push(current_product.id)
+				    @productqueue.productids.push(current_product.id)
+				  end
+				end
+
 				current_product.save
-			
 			end
 
-		#end
+		end
 
 		updated_queue_hash = Hash.new
 		updated_queue_hash["id"] = @productqueue.id
@@ -183,20 +197,17 @@ class ProductqueuesController < ApplicationController
 		updated_queue_hash["productids"] = new_product_ids
 
 		if @productqueue.save
-
-			respond_to do |format|
-				format.html
-				format.xml { render :xml => response }
-				format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
-			end
-			
+		  #respond_to do |format|
+		  #  format.html
+		  #  format.xml { render :xml => response }
+		  #  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
+		  #end
+		  render json: updated_queue_hash, status: 200, location: @productqueue
 		end
-
 	end
 
 private
 	def create_productqueue_params
 		params.require(:productqueue).permit(:user_id)
 	end
-
 end
