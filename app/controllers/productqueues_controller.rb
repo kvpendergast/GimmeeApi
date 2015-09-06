@@ -90,9 +90,11 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			render json: @productqueue, status: 201, location: @productqueue
-			#render xml: response
-			#logger.info response
+			respond_to do |format|
+				format.html
+				format.xml { render :xml => response}
+				format.json { render :json => @productqueue, status: 201, location: @productqueue}
+			end
 		end
 	end
 
@@ -181,8 +183,13 @@ class ProductqueuesController < ApplicationController
 		updated_queue_hash["productids"] = new_product_ids
 
 		if @productqueue.save
-			render json: updated_queue_hash, status: 200, location: @productqueue
-			#render xml: response
+
+			respond_to do |format|
+				format.html
+				format.xml { render :xml => response }
+				format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
+			end
+			
 		end
 
 	end
