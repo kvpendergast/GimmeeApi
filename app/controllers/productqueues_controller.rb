@@ -35,7 +35,7 @@ class ProductqueuesController < ApplicationController
 			@op = "ItemLookup"
 			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @RespGroup, @serv))
+			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @resp_group, @serv))
 			response_fragment = Nokogiri::XML.fragment(response)
 			node = Nokogiri::XML::Node.new('my_node', response)
 
@@ -98,11 +98,13 @@ class ProductqueuesController < ApplicationController
 		end
 
 		if @productqueue.save
-			respond_to do |format|
-				format.html
-				format.xml { render :xml => response}
-				format.json { render :json => @productqueue, status: 201, location: @productqueue}
-			end
+
+			render :json => @productqueue, status: 201, location: @productqueue
+			#respond_to do |format|
+			#	format.html
+			#	format.xml { render :xml => response}
+			#	format.json { render :json => @productqueue, status: 201, location: @productqueue}
+			#end
 		end
 	end
 
@@ -127,7 +129,7 @@ class ProductqueuesController < ApplicationController
 			@op = "ItemLookup"
 			@resp_group = "Images%2COffers%2CSmall"
 			@serv = "AWSECommerceService"
-			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @RespGroup, @serv))
+			response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @resp_group, @serv))
 			response_fragment = Nokogiri::XML.fragment(response)
 			node = Nokogiri::XML::Node.new('my_node', response)
 
