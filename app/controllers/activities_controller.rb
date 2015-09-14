@@ -10,9 +10,10 @@ class ActivitiesController < ApplicationController
 	end
 
 	def create
-		@activity = Activity.create(activity_params)
-		if @activity.save
-			render json: @activity.id, status: 200
+		activity = Activity.create(activity_params)
+		if activity.save
+			json_hash["activity_id"] = activity.id
+			render json: json_hash, status: 201
 		end
 
 	end

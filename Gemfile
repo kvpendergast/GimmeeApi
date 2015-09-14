@@ -41,6 +41,8 @@ gem 'json', '~> 1.8.3'
 
 gem 'pry-rails', :group => :development
 
+gem 'whenever', :require => false
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
