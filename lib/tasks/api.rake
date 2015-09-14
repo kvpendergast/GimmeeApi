@@ -1,5 +1,5 @@
 namespace :amazon do
-  desc "TODO"
+  desc "Simple cron job placeholder. Eventually will put product upsert algorithm here?"
   task upsert_products: :environment do
   	puts "Hello!"
   end
