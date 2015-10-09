@@ -37,11 +37,7 @@ class ProductqueuesController < ApplicationController
 	    end
       end
 
-	  @apitag = "Ventry-20"
-	  @op = "ItemLookup"
-	  @resp_group = "Images%2COffers%2CSmall"
-	  @serv = "AWSECommerceService"
-	  response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @resp_group, @serv))
+	  response = Nokogiri::XML(amazonSignature(request_asins))
 	  node = Nokogiri::XML::Node.new('my_node', response)
 
 	  #Saves each item block into a separate element of an array
@@ -113,11 +109,7 @@ class ProductqueuesController < ApplicationController
 			$count += 1
 		  end
 	    end
-  	    @apitag = "Ventry-20"
-	    @op = "ItemLookup"
-	    @resp_group = "Images%2COffers%2CSmall"
-	    @serv = "AWSECommerceService"
-	    response = Nokogiri::XML(amazonSignature(request_asins, @apitag, @op, @resp_group, @serv))
+	    response = Nokogiri::XML(amazonSignature(request_asins))
 	    node = Nokogiri::XML::Node.new('my_node', response)
 
 	    response_items = node.xpath('//xmlns:Item')
@@ -179,11 +171,12 @@ class ProductqueuesController < ApplicationController
 		#  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
 		#end
 		render json: updated_queue_hash, status: 200, location: @productqueue
+		#render xml: response
 	  end
 	end
 
 private
 	def create_productqueue_params
-		params.require(:productqueue).permit(:user_id)
+		#params.require(:productqueue).permit(:user_id)
 	end
 end
