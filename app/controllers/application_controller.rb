@@ -1,5 +1,43 @@
 class ApplicationController < ActionController::Base
 
+def parseProductResponse(response)
+  node = Nokogiri::XML::Node.new('my_node', response)
+  product_info = Hash.new
+  response_items = node.xpath('//xmlns:Item')
+  count = 0
+  response_items.each do |item|
+    product_info['Title'][count] = item.search('Title').text
+
+    #parses the product price and saves it to the product
+    offer = item.search('Offers/TotalOffers').text.to_i
+    if offer >= 1
+      sale_price = item.search('Offers/Offer/OfferListing/SalePrice/FormattedPrice').text
+      #checks if a sale price exists. If it does, saves as the product price
+      if sale_price != '' 
+        product_info['Price'][count] = sale_price
+      else
+        current_price = item.search('Offers/Offer/OfferListing/Price/FormattedPrice').text
+        product_info['Price'][count] = current_price
+      end
+    else
+      product_info['Price'][count] = nil
+    end
+    detail_page_url = item.search('DetailPageURL').text
+    product_info['Detail Page Url'][count] = detail_page_url
+
+    if item.search('ImageSets').text != ''
+      image_url = item.search('ImageSets').children.last.elements.last.search('URL').text
+      product_info['Image Url'][count] = image_url
+    else
+      product_info['Image Url'][count] = nil
+    end
+
+    count += 1
+  end
+
+  return product_info
+end
+
 def amazonSignature(itemIds)
 	@ASSOCIATE_TAG = ENV["AMAZON_ASSOCIATE_TAG"]
 	@ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
