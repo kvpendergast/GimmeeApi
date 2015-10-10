@@ -14,7 +14,8 @@ class ProductqueuesController < ApplicationController
 
 	def create
 	  #Initializes a new productqueue
-	  @productqueue = Productqueue.new(create_productqueue_params)
+	  @productqueue = Productqueue.new()
+	  logger.info @productqueue
 
 	  #Initializes the array that will store the product ids for the queue
 	  new_product_ids = Array.new
@@ -42,13 +43,12 @@ class ProductqueuesController < ApplicationController
 
 	  product_info = parseProductResponse(node)
 
-	  score += SSN_WEIGHT if ssn && ssn == salesforce_row['Social Security Number']
-
 	  product_info.each do |item|
 	    if item['Price'] != nil && item['Image Url'] != nil
-	  	  new_product = Product.create(productName: item['Title'], price: item['Price'], detailPageUrl: item['Detail Page Url'], imageUrl: item['Image Url'])
+	  	  new_product = Product.create(productName: item['productName'], price: item['Price'], detailPageUrl: item['DetailPageUrl'], imageurl: item['Image Url'])
           new_product.save
-	  	  @Productqueue.externalIds.push(new_product.id)
+          logger.info new_product.id
+	  	  @Productqueue.productids.push(new_product.id)
 	    end
 	  end
 	end
