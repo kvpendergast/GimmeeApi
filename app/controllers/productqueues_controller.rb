@@ -15,7 +15,7 @@ class ProductqueuesController < ApplicationController
 	def create
 	  #Initializes a new productqueue
 	  @productqueue = Productqueue.new()
-	  logger.info @productqueue
+	  logger.info @productqueue.id
 
 	  #Initializes the array that will store the product ids for the queue
 	  new_product_ids = Array.new
@@ -27,34 +27,36 @@ class ProductqueuesController < ApplicationController
 	  until new_product_ids.length >= 50
 		
 	  #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
-	  $count = 0
-	  request_asins.clear
-	  random_product = nil
-	  Product.uncached do
-	    until $count >= 10 do
-	      random_product = Product.order("RANDOM()").first
-	      request_asins.push(random_product.externalId)
-		  $count += 1
-	    end
-      end
+	    $count = 0
+	    request_asins.clear
+	    random_product = nil
+	    Product.uncached do
+	      until $count >= 10 do
+	        random_product = Product.order("RANDOM()").first
+	        request_asins.push(random_product.externalId)
+		    $count += 1
+	      end
+        end
 
-	  response = Nokogiri::XML(amazonSignature(request_asins))
-	  node = Nokogiri::XML::Node.new('my_node', response)
+	    response = Nokogiri::XML(amazonSignature(request_asins))
+	    node = Nokogiri::XML::Node.new('my_node', response)
 
-	  product_info = parseProductResponse(node)
+	    product_info = parseProductResponse(node)
 
-	  product_info.each do |item|
-	    if item['Price'] != nil && item['Image Url'] != nil
-	  	  new_product = Product.create(productName: item['productName'], price: item['Price'], detailPageUrl: item['DetailPageUrl'], imageurl: item['Image Url'])
-          new_product.save
-          logger.info new_product.id
-	  	  @Productqueue.productids.push(new_product.id)
+	    product_info.each do |item|
+	      if item['Price'] != nil && item['Image Url'] != nil
+	  	    new_product = Product.create(externalId: item['Asin'], productName: item['productName'], price: item['Price'], detailPageUrl: item['DetailPageURL'], imageurl: item['Image Url'])
+            new_product.save
+            new_product_ids.push(new_product.id)
+            #logger.info new_product.id
+	  	    @productqueue.productids.push(new_product.id)
+	      end
 	    end
 	  end
-	end
 	
 	  if @productqueue.save
-		render :json => @productqueue, status: 201, location: @productqueue
+		#render :json => @productqueue, status: 201, location: @productqueue
+		render xml: response
 			#respond_to do |format|
 			#	format.html
 			#	format.xml { render :xml => response}
