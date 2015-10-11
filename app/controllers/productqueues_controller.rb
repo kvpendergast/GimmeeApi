@@ -45,18 +45,23 @@ class ProductqueuesController < ApplicationController
 
 	    product_info.each do |item|
 	      if item['Price'] != nil && item['Image Url'] != nil
-	  	    new_product = Product.create(externalId: item['Asin'], productName: item['productName'], price: item['Price'], detailPageUrl: item['DetailPageURL'], imageurl: item['Image Url'])
-            new_product.save
-            new_product_ids.push(new_product.id)
+	      	@current_product = Product.find_by_externalId(item['ASIN'])
+	      	logger.info @current_product
+	      	@current_product.productName = item['productName']
+	      	@current_product.price = item['Price']
+	      	@current_product.detailPageUrl = item['DetailPageURL']
+	      	@current_product.imageurl = item['Image Url']
+	      	@current_product.save
+            new_product_ids.push(@current_product.id)
             #logger.info new_product.id
-	  	    @productqueue.productids.push(new_product.id)
+	  	    @productqueue.productids.push(@current_product.id)
 	      end
 	    end
 	  end
 	
 	  if @productqueue.save
-		#render :json => @productqueue, status: 201, location: @productqueue
-		render xml: response
+		render :json => @productqueue, status: 201, location: @productqueue
+		#render xml: response
 			#respond_to do |format|
 			#	format.html
 			#	format.xml { render :xml => response}

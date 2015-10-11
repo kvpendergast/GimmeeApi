@@ -7,6 +7,7 @@ def parseProductResponse(response)
   count = 0
   response_items.each do |item|
     product_info[count] = {'productName' => item.search('Title').text }
+    product_info[count]['ASIN'] = item.search('ASIN').text
     #parses the product price and saves it to the product
     offer = item.search('Offers/TotalOffers').text.to_i
     if offer >= 1
