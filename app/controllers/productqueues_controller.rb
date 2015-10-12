@@ -30,13 +30,8 @@ class ProductqueuesController < ApplicationController
 	    $count = 0
 	    request_asins.clear
 	    random_product = nil
-	    Product.uncached do
-	      until $count >= 10 do
-	        random_product = Product.order("RANDOM()").first
-	        request_asins.push(random_product.externalId)
-		    $count += 1
-	      end
-        end
+
+	    request_asins = randomProduct
 
 	    response = Nokogiri::XML(amazonSignature(request_asins))
 	    node = Nokogiri::XML::Node.new('my_node', response)
@@ -78,16 +73,7 @@ class ProductqueuesController < ApplicationController
 	  until new_product_ids.length >= 20
 				
 	    #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
-	    $count = 0
-	    request_asins.clear
-	    random_product = nil
-	    Product.uncached do
-	      until $count >= 10 do
-	        random_product = Product.order("RANDOM()").first
-	        request_asins.push(random_product.externalId)
-		    $count += 1
-	      end
-        end
+	    request_asins = randomProduct
 
 	    response = Nokogiri::XML(amazonSignature(request_asins))
 	    node = Nokogiri::XML::Node.new('my_node', response)
@@ -122,8 +108,8 @@ class ProductqueuesController < ApplicationController
 		#  format.xml { render :xml => response }
 		#  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
 		#end
-		#render json: updated_queue_hash, status: 200, location: @productqueue
-		render xml: response
+		render json: updated_queue_hash, status: 200, location: @productqueue
+		#render xml: response
 	  end
 	end
 

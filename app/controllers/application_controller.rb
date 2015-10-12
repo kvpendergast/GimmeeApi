@@ -121,6 +121,22 @@ def amazonAsins(search_keywords, search_category)
 
   return response
 end
+
+def randomProduct
+  $count = 0
+  random_product_ids = Array.new
+  random_product_ids.clear
+  random_product = nil
+  Product.uncached do
+    until $count >= 10 do
+      random_product = Product.order("RANDOM()").first
+      random_product_ids.push(random_product.externalId)
+      $count += 1
+    end
+  end
+
+  return random_product_ids
+end
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
