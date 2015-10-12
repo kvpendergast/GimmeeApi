@@ -68,8 +68,29 @@ def randomKeywords(category)
 end
 
 def randomCategory
+  @ASSOCIATE_TAG = ENV["AMAZON_ASSOCIATE_TAG"]
+  @ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
+  current_date = (Date.today + 1).to_s
+  @OPERATION = 'BrowseNodeLookup'
+  @browse_node_id = '468240'
+  @SERVICE = 'AWSECommerceService'
+  timestamp = current_date << "T19%3A37%3A00Z"
 
-  return category
+  #Unsigned Request: http://webservices.amazon.com/onca/xml?Service=AWSECommerceService&Operation=ItemSearch&AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&Operation=BrowseNodeLookup&Version=2013-08-01&BrowseNodeId=465600&AssociateTag=mytag-20&ResponseGroup=BrowseNodeInfo,TopSellers,NewReleases,MostWishedFor,MostGifted
+  #Signed Request: http://webservices.amazon.com/onca/xml?AWSAccessKeyId=AKIAIOSFODNN7EXAMPLE&AssociateTag=mytag-20&BrowseNodeId=465600&Operation=BrowseNodeLookup&Operation=ItemSearch&ResponseGroup=BrowseNodeInfo%2CTopSellers%2CNewReleases%2CMostWishedFor%2CMostGifted&Service=AWSECommerceService&Timestamp=2014-08-18T17%3A38%3A12.000Z&Version=2013-08-01&Signature=t48XyuQKLcYROCm7w%2FNqo3mihqB%2FQF2B9b9SX3FIOnU%3D
+  #Amazon Signature Generation
+  @SECURITY_KEY = ENV["AMAZON_SECURITY_KEY"]
+  data = "GET\nwebservices.amazon.com\n/onca/xml\nAWSAccessKeyId=#{@ACCESS_KEY}&AssociateTag=#{@ASSOCIATE_TAG}&BrowseNodeId=#{@browse_node_id}&Operation=#{@OPERATION}&Service=#{@SERVICE}&Timestamp=#{timestamp}"
+  hash = OpenSSL::HMAC.digest('sha256',@SECURITY_KEY,data)
+  signature = Base64.encode64(hash)
+  signature.gsub!('=','%3D')
+  signature.gsub!('+','%2B')
+  signature.gsub!(',','%2C')
+  signature.gsub!(':','%3A')
+
+  #Amazon Api Call
+  response = RestClient.get "http://webservices.amazon.com/onca/xml?AWSAccessKeyId=#{@ACCESS_KEY}&AssociateTag=#{@ASSOCIATE_TAG}&BrowseNodeId=#{@browse_node_id}&Operation=#{@OPERATION}&Service=#{@SERVICE}&Timestamp=#{timestamp}&Signature=#{signature}"
+  return response
 end
 
 def amazonAsins(search_keywords, search_category)
