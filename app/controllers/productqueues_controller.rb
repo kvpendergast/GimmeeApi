@@ -8,12 +8,6 @@ class ProductqueuesController < ApplicationController
 	def show
 	end
 
-	def test
-		response = Nokogiri::XML(randomCategory)		
-
-		render xml: response
-	end
-
 	def new
 		Productqueue.new
 	end
