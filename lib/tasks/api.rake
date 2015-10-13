@@ -1,6 +1,14 @@
 namespace :amazon do
   desc "Simple cron job placeholder. Eventually will put product upsert algorithm here?"
   task upsert_products: :environment do
+
+    category = randomCategory
+    browse_node_id = #some_id
+
+    new_products_response = Nokogiri::XML(newProducts(browse_node_id, category))
+
+    request_asins = new_products_response.xpath('//xmlns:ASIN')
+    
   	#external_ids = amazonRandomProductsGenerator()
   	#response = amazonSignature()
 
@@ -12,8 +20,6 @@ namespace :amazon do
   			#thing.create_new_product_with_product_attributes 
   		#end
   	#end
-
-  	puts "Hello!"
   end
 
 end
