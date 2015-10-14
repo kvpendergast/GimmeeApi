@@ -3,7 +3,7 @@ namespace :amazon do
   task upsert_products: :environment do
 
     category = randomCategory
-    browse_node_id = #some_id
+    browse_node_id = randomCategory.browse_node_id
 
     new_products_response = Nokogiri::XML(newProducts(browse_node_id, category))
 
