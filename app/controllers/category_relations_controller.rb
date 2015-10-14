@@ -1,0 +1,2 @@
+class CategoryRelationsController < ApplicationController
+end
