@@ -1,22 +1,26 @@
 namespace :amazon do
   desc "Simple cron job placeholder. Eventually will put product upsert algorithm here?"
   task upsert_products: :environment do
+
     category = randomCategory
-    keywords = randomKeywords(category)
+    browse_node_id = randomCategory.browse_node_id
 
-    external_ids_response = Nokogiri::XML(amazonAsins(keywords,category))
+    new_products_response = Nokogiri::XML(newProducts(browse_node_id, category))
 
-    #parse external_ids_response to extract ASINS
-    parsed_response_asins = external_ids_response.xpath('//xmlns:ASIN')
+    request_asins = new_products_response.xpath('//xmlns:ASIN')
+    
+  	#external_ids = amazonRandomProductsGenerator()
+  	#response = amazonSignature()
 
-    #Submit ASINS to Amazon for product information
-    amazon_product_response = amazonSignature(parsed_response_asins)
-
-    #Parse amazon_product_response for product information
-
-    #Save product information to database
-
-  	puts "Hello!"
+  	#external_ids.each do |thing|
+  		#if thing.exist?
+  			#thing.update_product_attributes
+  		#else
+  			#response.parse_product_attributes
+  			#thing.create_new_product_with_product_attributes 
+  		#end
+  	#end
+>>>>>>> backgroundJobs
   end
 
 end
