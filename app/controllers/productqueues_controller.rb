@@ -1,8 +1,10 @@
 class ProductqueuesController < ApplicationController
 
 	def index
-		@productqueues = Productqueue.all
-		render json: @productqueues
+		productqueues = Productqueue.all
+		productqueue_ids = []
+		productqueues.each { |thing| productqueue_ids.push(thing.id) }
+		render json: productqueue_ids
 	end
 
 	def show
