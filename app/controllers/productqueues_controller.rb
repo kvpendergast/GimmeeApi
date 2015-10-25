@@ -72,10 +72,13 @@ class ProductqueuesController < ApplicationController
 	  new_product_ids = Array.new
 	  request_asins = Array.new
 
+	  @productqueue.productids = [] if @productqueue.productids == nil
+
 	  until new_product_ids.length >= 20
 				
 	    #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
-	    request_asins = randomProduct
+	    logger.info @productqueue.tag
+	    request_asins = randomProduct(@productqueue.tag)
 
 	    response = Nokogiri::XML(amazonSignature(request_asins))
 	    node = Nokogiri::XML::Node.new('my_node', response)

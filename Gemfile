@@ -43,6 +43,8 @@ gem 'pry-rails', :group => :development
 
 gem 'whenever', :require => false
 
+gem 'slack-notifier'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
