@@ -39,7 +39,7 @@ def parseProductResponse(response)
 end
 
 def amazonSignature(itemIds)
-	@ASSOCIATE_TAG = ENV["AMAZON_ASSOCIATE_TAG"]
+	@ASSOCIATE_TAG = "my-tag-20" #ENV["AMAZON_ASSOCIATE_TAG"]
 	@ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
 	current_date = (Date.today + 1).to_s
 	@RESPONSE_GROUP = 'Images%2COffers%2CSmall'
@@ -73,7 +73,7 @@ end
 
 def categoryHierarchy
 
-  @ASSOCIATE_TAG = "Ventry-20"
+  @ASSOCIATE_TAG = "my-tag-20"
   @ACCESS_KEY = "AKIAIHMGKYWGXDTROKMA"
   @current_date = (Date.today).to_s
   @OPERATION = "BrowseNodeLookup"
@@ -110,7 +110,7 @@ end
 def amazonAsins(search_keywords, search_category)
   #Variables for signature and amazon api call
   @ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
-  @ASSOCIATE_TAG = ENV["AMAZON_ASSOCIATE_TAG"]
+  @ASSOCIATE_TAG = 'my-tag-20'#ENV["AMAZON_ASSOCIATE_TAG"]
   @AVAILABILITY = 'Available'
   keywords = search_keywords
   @OPERATION = "ItemSearch"
@@ -156,7 +156,7 @@ end
 
 def newProducts(browse_node_id, category)
 
-associateTag = ENV["AMAZON_ASSOCIATE_TAG"]
+associateTag = 'my-tag-20'#ENV["AMAZON_ASSOCIATE_TAG"]
 @accesskey = ENV["AMAZON_ACCESS_KEY"]
 operation = "ItemSearch"
 browse_node = browse_node_id
