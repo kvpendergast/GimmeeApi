@@ -5,8 +5,8 @@
 #set :environment, "development"
 set :output, {:standard => "log/cron_log.log"}
 
-every 5.minutes do 
-	rake "amazon:upsert_products"
+every 1.day, :at => '6:30 a.m.' do 
+	rake "amazon:update_amazon_products"
 	end
 
 # Example:
