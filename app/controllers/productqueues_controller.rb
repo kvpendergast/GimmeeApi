@@ -5,7 +5,7 @@ class ProductqueuesController < ApplicationController
 		queues_hash = Array.new
 		count = 0
 		productqueues.each do |row|
-		  queues_hash[count]= {'queue_id' => row.id }
+		  queues_hash[count]= {'queue_id' => row.id.to_s }
 		  queues_hash[count]['Tag'] = row.tag
 		  count += 1
 	    end
