@@ -2,9 +2,14 @@ class ProductqueuesController < ApplicationController
 
 	def index
 		productqueues = Productqueue.all
-		productqueue_ids = []
-		productqueues.each { |thing| productqueue_ids.push(thing.id) }
-		render json: productqueue_ids
+		queues_hash = Array.new
+		count = 0
+		productqueues.each do |row|
+		  queues_hash[count]= {'queue_id' => row.id }
+		  queues_hash[count]['Tag'] = row.tag
+		  count += 1
+	    end
+		render json: queues_hash
 	end
 
 	def show
