@@ -141,17 +141,18 @@ def randomProduct(tag)
   random_product_ids = Array.new
   random_product_ids.clear
   random_product = nil
+  random_products = Array.new
   Product.uncached do
     until $count >= 10 do
       random_product = Product.order("RANDOM()").first if tag == 'Random'
       random_product = Product.where(:tag => "#{tag}").order("RANDOM()").first if tag != 'Random'
       
-      random_product_ids.push(random_product.externalId)
+      random_products.push(random_product)
       $count += 1 if random_product.tag = tag
     end
   end
 
-  return random_product_ids
+  return random_products
 end
 
 def newProducts(browse_node_id, category)
