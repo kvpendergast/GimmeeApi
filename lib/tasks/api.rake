@@ -4,7 +4,8 @@ namespace :amazon do
     App = ApplicationController.new
     #Store all amazon products into array
     
-    amazon_products = Product.where('updated_at < ?', 1.days.ago)
+    #amazon_products = Product.where('updated_at < ?', 1.days.ago)
+    amazon_products = Product.all
     updated_products = Array.new
     temp_arr = Array.new
     temp_arr_2 = Array.new
