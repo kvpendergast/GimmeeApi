@@ -18,7 +18,6 @@ namespace :amazon do
       temp_arr_2.push(thing)
       if temp_arr.length == 10
         response = Nokogiri::XML(App.amazonSignature(temp_arr))
-        puts response
         puts "Another response"
         node = Nokogiri::XML::Node.new('my_node', response)
         product_info = App.parseProductResponse(node)

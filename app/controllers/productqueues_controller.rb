@@ -80,7 +80,7 @@ class ProductqueuesController < ApplicationController
 	    new_products = randomProduct(@productqueue.tag)
 
 	    new_products.each do |item|
-	      if item.price != nil && item.imageurl != nil
+	      if item.imageurl != nil
             new_product_ids.push(item.id)
 	  	    @productqueue.productids.push(item.id)
 	      end

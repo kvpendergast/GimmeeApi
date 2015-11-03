@@ -20,7 +20,7 @@ def parseProductResponse(response)
         product_info[count]['Price'] = current_price
       end
     else
-      product_info[count]['Price'] = nil
+      product_info[count]['Price'] = 'N/A'
     end
     detail_page_url = item.search('DetailPageURL').text
     product_info[count]['DetailPageURL'] = detail_page_url
