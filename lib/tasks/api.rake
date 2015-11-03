@@ -18,6 +18,8 @@ namespace :amazon do
       temp_arr_2.push(thing)
       if temp_arr.length == 10
         response = Nokogiri::XML(App.amazonSignature(temp_arr))
+        puts response
+        puts "Another response"
         node = Nokogiri::XML::Node.new('my_node', response)
         product_info = App.parseProductResponse(node)
         temp_arr.clear
@@ -30,11 +32,8 @@ namespace :amazon do
           @current_product.detailPageUrl = item['DetailPageURL']
           @current_product.imageurl = item['Image Url']
           @current_product.save
-          puts item['productName']
-          puts item['Price']
           if last_update_date != @current_product.updated_at
             updated_products.push(@current_product.id)
-            puts "changed"
           end
         end
         sleep(1)
