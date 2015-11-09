@@ -27,9 +27,33 @@ $ heroku run rake db:migrate
 $ heroku open
 ```
 
-## Documentation
+## API Endpoints
+```sh
+GET /products
+
+[432]
+0:  {
+  id: ###                                   --Integer
+  productName: "Some Product Name"          --String
+  user_id: "##"                             --Integer
+  created_at: "2015-08-04T00:00:00.000Z"    --Date/Time
+  updated_at: "2015-08-04T00:00:00.000Z"    --Date/Time
+  supplier_id: "##"                         --Integer
+  price: "$00.00"                           --String
+  imageurl: "www.someimageurl.com"          --string
+  externalId: "########"                    --string
+  detailPageUrl: "www.someurl.com"          --string
+  tag: "Random"                             --string
+}
+
+1: {
+  id: ###                                   --Integer
+  ...
+}
+
+```
+
 
 For more information about using Ruby on Heroku, see these Dev Center articles:
 
 - [Ruby on Heroku](https://devcenter.heroku.com/categories/ruby)
-
