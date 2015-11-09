@@ -33,7 +33,7 @@ GET /products
 
 [432]
 0:  {
-  id: ###                                   --Integer
+  id: "###"                                 --Integer
   productName: "Some Product Name"          --String
   user_id: "##"                             --Integer
   created_at: "2015-08-04T00:00:00.000Z"    --Date/Time
