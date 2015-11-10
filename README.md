@@ -1,8 +1,10 @@
-# ruby-getting-started
+# ventry-api
 
-A barebones Rails app, which can easily be deployed to Heroku.
+An app housing Ventry's Api. Deployed on Heroku.
 
-This application support the [Getting Started with Ruby on Heroku](https://devcenter.heroku.com/articles/getting-started-with-ruby) article - check it out.
+This application support the ventry-api on Heroku.
+
+Ruby version ruby 2.2.0p0 (2014-12-25 revision 49005)
 
 ## Running Locally
 
