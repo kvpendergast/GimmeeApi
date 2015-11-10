@@ -97,7 +97,8 @@ productids: ["###"]
 1:  "###"
 2:  "###"
 3:  "###"
-
+...
+tag: "Category Name"
 }
 
 ```
