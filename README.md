@@ -84,21 +84,22 @@ _GET /productqueues_
 }
 
 ```
+This endpoint returns the specified productqueue's info and product ids associated with that queue.
 _GET /productqueues/:id_
 ```sh
-{
 
-id: "###"
-user_id: "###"
-created_at: "2015-11-10T00:07:53.270+00:00"
-updated_at: "2015-11-10T00:07:53.270+00:00"
-productids: ["###"]
-0:  "###"
-1:  "###"
-2:  "###"
-3:  "###"
-...
-tag: "Category Name"
+{
+  id: "###"
+  user_id: "###"
+  created_at: "2015-11-10T00:07:53.270+00:00"
+  updated_at: "2015-11-10T00:07:53.270+00:00"
+  productids: ["###"]
+  0:  "###"
+  1:  "###"
+  2:  "###" 
+  3:  "###"
+  ...
+  tag: "Category Name"
 }
 
 ```
