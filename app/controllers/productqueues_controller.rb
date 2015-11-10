@@ -13,6 +13,8 @@ class ProductqueuesController < ApplicationController
 	end
 
 	def show
+		@productqueue = Product.find(params[:id])
+		render json: @productqueue
 	end
 
 	def new
