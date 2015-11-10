@@ -47,7 +47,7 @@ _GET /products_
 }
 
 1: {
-  id: ###                                   --Integer
+  id: "###"                                 --Integer
   ...
 }
 
