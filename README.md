@@ -27,6 +27,24 @@ $ heroku run rake db:migrate
 $ heroku open
 ```
 
+## Pushing to Staging (Staging URL: git@heroku.com:ventry-api-staging.git)
+
+```sh
+$ git status
+$ git add .
+$ git commit -am "Commit message"
+$ git push staging master 
+```
+
+## Pushing to Production (Production URL: git@heroku.com:ventry-api.git)
+
+```sh
+$ git status
+$ git add .
+$ git commit -am "Commit message"
+$ git push production master 
+```
+
 ## API Endpoints
 
 This endpoint returns all products in the Ventry database and each product's info.
