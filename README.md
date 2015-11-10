@@ -31,7 +31,7 @@ $ heroku open
 
 _GET /products_
 ```sh
-[432]
+["###"]
 0:  {
   id: "###"                                 --Integer
   productName: "Some Product Name"          --String
@@ -72,7 +72,7 @@ _GET /products/:id_
 _GET /productqueues_
 ```sh
 
-[##]
+["###"]
 0:  {
   queue_id: "##"                             --Integer
   Tag: "some_name"                           --String
