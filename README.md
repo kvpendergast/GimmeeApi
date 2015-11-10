@@ -93,20 +93,36 @@ This endpoint returns the specified productqueue's info and product ids associat
 _GET /productqueues/:id_
 ```sh
 {
-  id: "###"
-  user_id: "###"
-  created_at: "2015-11-10T00:07:53.270+00:00"
-  updated_at: "2015-11-10T00:07:53.270+00:00"
-  productids: ["###"]
-  0:  "###"
-  1:  "###"
-  2:  "###" 
-  3:  "###"
+  id: "###"                                    --Integer
+  user_id: "###"                               --Integer
+  created_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
+  updated_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
+  productids: ["###"]                          --Integer
+  0:  "###"                                    --Integer
+  1:  "###"                                    --Integer
+  2:  "###"                                    --Integer
+  3:  "###"                                    --Integer
   ...
-  tag: "Category Name"
+  tag: "Category Name"                         --String
 }
 ```
+This endpoint adds products to the specified productqueue and then returns the productqueue info and the newly added products.
 
+_GET /productqueues/addproducts/:id_
+```sh
+{
+  id: "###"                                    --Integer
+  user_id: "###"                               --Integer
+  created_at: "2015-11-10T00:45:18.239+00:00"  --Date/Time
+  updated_at: "2015-11-10T00:45:18.239+00:00"  --Date/Time
+  productids: ["###"]
+  0:  "###"                                    --Integer
+  1:  "###"                                    --Integer
+  2:  "###"                                    --Integer
+  3:  "###"                                    --Integer
+  ...
+}
+```
 
 For more information about using Ruby on Heroku, see these Dev Center articles:
 
