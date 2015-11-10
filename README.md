@@ -29,6 +29,7 @@ $ heroku open
 
 ## API Endpoints
 
+This endpoint returns all products in the Ventry database and each product's info.
 _GET /products_
 ```sh
 ["###"]
@@ -52,6 +53,7 @@ _GET /products_
 }
 
 ```
+This endpoint returns the specified product's info.
 _GET /products/:id_
 ```sh
 {
@@ -69,6 +71,7 @@ _GET /products/:id_
 }
 
 ```
+This endpoint returns all productqueues and associated products.
 _GET /productqueues_
 ```sh
 
