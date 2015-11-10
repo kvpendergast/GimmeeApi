@@ -27,7 +27,11 @@ $ heroku run rake db:migrate
 $ heroku open
 ```
 
-## Pushing to Staging (Staging URL: git@heroku.com:ventry-api-staging.git)
+## Pushing to Staging
+
+staging GIT URL: git@heroku.com:ventry-api-staging.git
+
+Root URL: www.ventry-api-staging.herokuapp.com
 
 ```sh
 $ git status
@@ -36,7 +40,11 @@ $ git commit -am "Commit message"
 $ git push staging master 
 ```
 
-## Pushing to Production (Production URL: git@heroku.com:ventry-api.git)
+## Pushing to Production
+
+production GIT URL: git@heroku.com:ventry-api.git
+
+Root URL: www.ventry-api.herokuapp.com
 
 ```sh
 $ git status
