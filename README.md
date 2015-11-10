@@ -28,9 +28,9 @@ $ heroku open
 ```
 
 ## API Endpoints
-```sh
-GET /products
 
+_GET /products_
+```sh
 [432]
 0:  {
   id: "###"                                 --Integer
@@ -48,6 +48,38 @@ GET /products
 
 1: {
   id: ###                                   --Integer
+  ...
+}
+
+```
+_GET /products/:id_
+```sh
+{
+  id: "###"
+  productName: "Some Product Name"          --String
+  user_id: "###"                            --Integer
+  created_at: "2015-08-04T00:00:00.000Z"    --Date/Time
+  updated_at: "2015-08-04T00:00:00.000Z"    --Date/Time
+  supplier_id: "###"                        --Integer
+  price: "$00.00"                           --String
+  imageurl: "www.someimageurl.com"          --String
+  externalId: "######"                      --Integer
+  detailPageUrl: "www.someurl.com"          --String
+  tag: "some_name"                          --String
+}
+
+```
+_GET /productqueues_
+```sh
+
+[##]
+0:  {
+  queue_id: "##"                             --Integer
+  Tag: "some_name"                           --String
+}
+
+1: {
+  queue:id: "##"                             --Integer
   ...
 }
 
