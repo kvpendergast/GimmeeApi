@@ -84,6 +84,23 @@ _GET /productqueues_
 }
 
 ```
+_GET /productqueues/:id_
+```sh
+{
+
+id: "###"
+user_id: "###"
+created_at: "2015-11-10T00:07:53.270+00:00"
+updated_at: "2015-11-10T00:07:53.270+00:00"
+productids: ["###"]
+0:  "###"
+1:  "###"
+2:  "###"
+3:  "###"
+
+}
+
+```
 
 
 For more information about using Ruby on Heroku, see these Dev Center articles:
