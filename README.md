@@ -152,6 +152,15 @@ _GET /productqueues/addproducts/:id_
 }
 ```
 
+_POST /activities/share_
+```sh
+{
+  user_id: "###"                               --Integer
+  friend_id: "###"                             --Integer
+  activity_id: "###"                           --Integer
+}
+```
+
 For more information about using Ruby on Heroku, see these Dev Center articles:
 
 - [Ruby on Heroku](https://devcenter.heroku.com/categories/ruby)
