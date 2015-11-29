@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
   resources :users, :products, :suppliers, :activities, :friendships, :productqueues
   
-  get '/users/:id/activities', to: 'activities#show'
-  get '/users/:id/productqueues', to: 'users#productqueue'
-  get '/productqueues/addproducts/:id', to: 'productqueues#addproductstoqueue'
+  #Version 0
+  get '/v0/products', to: 'products#index'
+  get '/v0/products/:id', to: 'products#show'
+  get '/v0/productqueues', to: 'productqueues#index'
+  get '/v0/productqueues/:id', to: 'productqueues#show'
+  get '/v0/users/:id/activities', to: 'activities#show'
+  get '/v0/users/:id/productqueues', to: 'users#productqueue'
+  get '/v0/productqueues/addproducts/:id', to: 'productqueues#addproductstoqueue'
+  post '/v0/activities/share', to: 'shared_activities#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

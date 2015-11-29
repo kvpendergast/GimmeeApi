@@ -15,11 +15,9 @@ class ActivitiesController < ApplicationController
 			json_hash["activity_id"] = activity.id
 			render json: json_hash, status: 201
 		end
-
 	end
-
 	private
 		def activity_params
-			params.require(:activity).permit(:user_id, :product_id, :purchased, :viewTime, :productName, :price, :imageurl, :externalid, :detailPageUrl, :supplier_id)
+		  params.require(:activity).permit(:user_id, :product_id, :productName, :price, :imageurl, :externalid, :detailPageUrl)
 		end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151022032722) do
+ActiveRecord::Schema.define(version: 20151121202729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -75,6 +75,14 @@ ActiveRecord::Schema.define(version: 20151022032722) do
     t.string   "tag"
   end
 
+  create_table "shared_activities", force: :cascade do |t|
+    t.integer  "product_id"
+    t.integer  "user_id"
+    t.integer  "friend_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "suppliers", force: :cascade do |t|
     t.string   "supplierName"
     t.datetime "created_at",   null: false
@@ -83,13 +91,18 @@ ActiveRecord::Schema.define(version: 20151022032722) do
 
   create_table "temp_products", id: false, force: :cascade do |t|
     t.text "asin"
+    t.text "tag"
   end
 
   create_table "users", force: :cascade do |t|
     t.string   "firstName"
     t.string   "lastName"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "username"
+    t.string   "email"
+    t.string   "encrypted_password"
+    t.string   "salt"
   end
 
 end

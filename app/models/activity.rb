@@ -6,4 +6,6 @@ class Activity < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :product
 
+	has_many :shared_activities
+
 end
