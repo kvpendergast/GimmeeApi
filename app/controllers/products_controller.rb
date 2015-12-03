@@ -10,10 +10,19 @@ class ProductsController < ApplicationController
 	end
 
 	def create
-		product = Product.create(product_params)
-		if product.save
-		  render json: product, status: 201, location: product
+		logger.info product_params["externalId"]
+		if Product.exists?(externalId: product_params["externalId"])
+		  message = Hash.new
+		  message["message"] = "Product already exists"
+		  render json: message   
+		else
+		  product = Product.create(externalId: product_params["externalId"])
+		  if product.save
+		    render json: product, status: 201, location: product
+		  end
 		end
+
+		
 	end
 
 	def show
