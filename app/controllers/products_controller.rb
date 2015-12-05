@@ -10,16 +10,27 @@ class ProductsController < ApplicationController
 	end
 
 	def create
-		logger.info product_params["externalId"]
 		if Product.exists?(externalId: product_params["externalId"])
 		  message = Hash.new
 		  message["message"] = "Product already exists"
 		  render json: message   
 		else
-		  product = Product.create(externalId: product_params["externalId"])
+		  product = Product.create(externalId: product_params["externalId"], tag: product_params["tag"])
+		  
+		  response = Nokogiri::XML(add_one_product(product.externalId))
+		  node = Nokogiri::XML::Node.new('my_node', response)
+		  product_info = parseProductResponse(node)
+		  product_info.each do |item|
+		    logger.info item.keys
+		    product.productName = item['productName']
+		    product.price = item['Price']
+		    product.imageurl = item['Image Url']
+		    product.detailPageUrl = item['DetailPageURL']
+		  end
 		  if product.save
 		    render json: product, status: 201, location: product
 		  end
+
 		end
 
 		
@@ -32,6 +43,6 @@ class ProductsController < ApplicationController
 
 	private
 	  def product_params
-	  	params.require(:product).permit(:externalId)
+	  	params.require(:product).permit(:externalId, :tag)
 	  end
 end

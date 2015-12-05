@@ -178,6 +178,29 @@ currentdate = (Date.today + 1).to_s
 
 return response
 end
+
+def add_one_product(externalId)
+  @ASSOCIATE_TAG = "my-tag-20" #ENV["AMAZON_ASSOCIATE_TAG"]
+  @ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
+  current_date = (Date.today + 1).to_s
+  @RESPONSE_GROUP = 'Images%2COffers%2CSmall'
+  @OPERATION = 'ItemLookup'
+  @SERVICE = 'AWSECommerceService'
+  timestamp = current_date << "T19%3A37%3A00Z"
+  
+  #Amazon Signature Generation
+  @SECURITY_KEY = ENV["AMAZON_SECURITY_KEY"]
+  data = "GET\nwebservices.amazon.com\n/onca/xml\nAWSAccessKeyId=#{@ACCESS_KEY}&AssociateTag=#{@ASSOCIATE_TAG}&ItemId=#{externalId}&Operation=#{@OPERATION}&ResponseGroup=#{@RESPONSE_GROUP}&Service=#{@SERVICE}&Timestamp=#{timestamp}"
+  hash = OpenSSL::HMAC.digest('sha256',@SECURITY_KEY,data)
+  signature = Base64.encode64(hash)
+  signature.gsub!('=','%3D')
+  signature.gsub!('+','%2B')
+  signature.gsub!(',','%2C')
+
+  #Amazon Api Call
+  response = RestClient.get "http://webservices.amazon.com/onca/xml?AWSAccessKeyId=#{@ACCESS_KEY}&AssociateTag=#{@ASSOCIATE_TAG}&ItemId=#{externalId}&Operation=#{@OPERATION}&ResponseGroup=#{@RESPONSE_GROUP}&Service=#{@SERVICE}&Timestamp=#{timestamp}&Signature=#{signature}"
+  return response
+end
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :null_session
