@@ -10,21 +10,23 @@ class ProductsController < ApplicationController
 	end
 
 	def create
-
-		product = Product.create(externalId: product_params["externalId"], tag: product_params["tag"])
+		  product = Product.create(externalId: product_params["externalId"], tag: product_params["tag"])
 		  
-		response = Nokogiri::XML(add_one_product(product.externalId))
-		node = Nokogiri::XML::Node.new('my_node', response)
-		product_info = parseProductResponse(node)
-		product_info.each do |item|
-		logger.info item.keys
-		product.productName = item['productName']
-		product.price = item['Price']
-		product.imageurl = item['Image Url']
-		product.detailPageUrl = item['DetailPageURL']
-		if product.save
-		  render json: product, status: 201, location: product
-		end	
+		  response = Nokogiri::XML(add_one_product(product.externalId))
+		  node = Nokogiri::XML::Node.new('my_node', response)
+		  product_info = parseProductResponse(node)
+		  product_info.each do |item|
+		    logger.info item.keys
+		    product.productName = item['productName']
+		    product.price = item['Price']
+		    product.imageurl = item['Image Url']
+		    product.detailPageUrl = item['DetailPageURL']
+		  end
+		  if product.save
+		    render json: product, status: 201, location: product
+		  end
+
+		
 	end
 
 	def show
