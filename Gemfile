@@ -45,6 +45,8 @@ gem 'whenever', :require => false
 
 gem 'slack-notifier'
 
+gem 'aws-sdk', '~> 2'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

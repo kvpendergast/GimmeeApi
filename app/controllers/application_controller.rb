@@ -39,7 +39,7 @@ def parseProductResponse(response)
 end
 
 def amazonSignature(itemIds)
-	@ASSOCIATE_TAG = "my-tag-20" #ENV["AMAZON_ASSOCIATE_TAG"]
+	@ASSOCIATE_TAG = ENV["AMAZON_ASSOCIATE_TAG"]
 	@ACCESS_KEY = ENV["AMAZON_ACCESS_KEY"]
 	current_date = (Date.today + 1).to_s
 	@RESPONSE_GROUP = 'Images%2COffers%2CSmall'
