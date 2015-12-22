@@ -203,6 +203,14 @@ _PATCH /v0/friendships/accept/:id_
 ```
 *When the friend accepts the request, we create a reverse friendship that mirrors the initial request. This occurs so that the friend can see the friendship as well as the original user who initiated the friend request.*
 
+_PATCH /v0/friendships/reject/:id
+```sh
+{
+  "message": "Friendship rejected"
+}
+```
+*If the friendship is rejected, both the friendship and the reverse friendship are destroyed.*
+
 
 For more information about using Ruby on Heroku, see these Dev Center articles:
 
