@@ -161,6 +161,49 @@ _POST /activities/share_
 }
 ```
 
+_PATCH /friendships_
+
+*Payload*
+```sh
+{"user_id":"##", "friend_id":"##"}
+```
+
+*Response*
+```sh
+{
+  "id": "##"
+  "user_id": "##"
+  "friend_id": "##"
+  "created_at": "YYYY-MM-DDTHH:MM:SS.810Z"
+  "updated_at": "2015-12-22T20:35:33.810Z"
+  "accepted": "BOOL"
+}
+```
+
+_PATCH /v0/friendships/accept/:id_
+```sh
+{
+  "friendship": {
+    "id": "##"
+    "user_id": "##"
+    "friend_id": "##"
+    "created_at": "YYYY-MM-DDTHH:MM:SS.810Z"
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.174Z"
+    "accepted": "BOOL"
+  }-
+  "reverse friendship": {
+    "id": "##"
+    "user_id": "##"
+    "friend_id": "##"
+    "created_at": "YYYY-MM-DDTHH:MM:SS.178Z"
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.178Z"
+    "accepted": "BOOL"
+  }-
+}
+```
+*When the friend accepts the request, we create a reverse friendship that mirrors the initial request. This occurs so that the friend can see the friendship as well as the original user who initiated the friend request.*
+
+
 For more information about using Ruby on Heroku, see these Dev Center articles:
 
 - [Ruby on Heroku](https://devcenter.heroku.com/categories/ruby)
