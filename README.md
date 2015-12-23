@@ -161,6 +161,23 @@ _POST /activities/share_
 }
 ```
 
+_GET /v0/users/:id/friendships_
+```sh
+-0: {
+      "user_id": "##"
+      "id": "##"
+      "friend_id": "##"
+      "created_at": "YYYY-MM-DDTHH:MM:SS.264Z"
+      "updated_at": "YYYY-MM-DDTHH:MM:SS.264Z"
+      "accepted": "BOOL"
+    }
+-1: {
+        "user_id": "##"
+        ...
+    }
+```
+
+
 _PATCH /friendships_
 
 *Payload*
