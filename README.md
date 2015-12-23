@@ -170,6 +170,7 @@ _GET /v0/users/:id/friendships_
       "created_at": "YYYY-MM-DDTHH:MM:SS.264Z"
       "updated_at": "YYYY-MM-DDTHH:MM:SS.264Z"
       "accepted": "BOOL"
+      "initiated_friendship": "BOOL"
     }
 -1: {
         "user_id": "##"
@@ -194,6 +195,7 @@ _PATCH /friendships_
   "created_at": "YYYY-MM-DDTHH:MM:SS.810Z"
   "updated_at": "2015-12-22T20:35:33.810Z"
   "accepted": "BOOL"
+  "initiated_friendship: "BOOL"
 }
 ```
 
@@ -207,6 +209,7 @@ _PATCH /v0/friendships/accept/:id_
     "created_at": "YYYY-MM-DDTHH:MM:SS.810Z"
     "updated_at": "YYYY-MM-DDTHH:MM:SS.174Z"
     "accepted": "BOOL"
+    "initiated_friendship": "BOOL"
   }-
   "reverse friendship": {
     "id": "##"
@@ -215,6 +218,7 @@ _PATCH /v0/friendships/accept/:id_
     "created_at": "YYYY-MM-DDTHH:MM:SS.178Z"
     "updated_at": "YYYY-MM-DDTHH:MM:SS.178Z"
     "accepted": "BOOL"
+    "initiated_friendship": "BOOL"
   }-
 }
 ```
