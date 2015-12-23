@@ -179,7 +179,7 @@ _GET /v0/users/:id/friendships_
 ```
 
 
-_PATCH /friendships_
+_POST /friendships_
 
 *Payload*
 ```sh
