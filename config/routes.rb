@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   get '/v0/users/:id/productqueues', to: 'users#productqueue'
   get '/v0/productqueues/addproducts/:id', to: 'productqueues#addproductstoqueue'
   post '/v0/activities/share', to: 'shared_activities#create'
+  patch '/v0/friendships/accept/:id', to: 'friendships#accept_friend_request'
+  patch '/v0/friendships/reject/:id', to: 'friendships#reject_friend_request'
+  get '/v0/users/:id/friendships', to: 'users#friends'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

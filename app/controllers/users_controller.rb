@@ -23,7 +23,9 @@ class UsersController < ApplicationController
 	end
 
 	def friends
-		@friends = User.find(params[:id]).friendships.all
+		friends = User.find(params[:id]).friendships.all
+		logger.info "Did it work?"
+		render json: friends
 	end
 
 	def productqueue
