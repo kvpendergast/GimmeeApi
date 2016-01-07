@@ -11,10 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160105044955) do
+ActiveRecord::Schema.define(version: 20160107122648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "activities", force: :cascade do |t|
     t.integer  "user_id"
@@ -98,16 +99,16 @@ ActiveRecord::Schema.define(version: 20160105044955) do
     t.text "tag"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "username"
     t.string   "firstName"
     t.string   "lastName"
-    t.datetime "created_at",         null: false
-    t.datetime "updated_at",         null: false
-    t.string   "username"
     t.string   "email"
-    t.string   "encrypted_password"
-    t.string   "salt"
     t.string   "phone"
+    t.string   "facebook_id"
+    t.string   "encrypted_password"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
 end
