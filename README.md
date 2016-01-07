@@ -57,6 +57,36 @@ $ git push production master
 
 ## API Endpoints
 
+This endpoint creates a user
+
+_POST /users_
+
+*Payload*
+```sh
+{
+  "firstName":"Some first name",
+  "lastName":"Some last name",
+  "email":"Some email",
+  "username":"Some username",
+  "phone":"some phone number"
+}
+```
+*Response*
+```sh
+{
+  "id": 14
+  "created_at": "2016-01-07T04:30:55.043Z"
+  "firstName": null
+  "lastName": null
+  "updated_at": "2016-01-07T04:30:55.043Z"
+  "username": null
+  "email": null
+  "encrypted_password": null
+  "salt": null
+  "phone": null
+}
+```
+
 This endpoint returns all products in the Ventry database and each product's info.
 
 _GET /products_
