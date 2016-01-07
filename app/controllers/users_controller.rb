@@ -24,7 +24,6 @@ class UsersController < ApplicationController
 
 	def friends
 		friends = User.find(params[:id]).friendships.all
-		logger.info "Did it work?"
 		render json: friends
 	end
 
@@ -35,6 +34,6 @@ class UsersController < ApplicationController
 
 private
 	def user_params
-		params.require(:user).permit(:firstName)
+		params.permit(:firstName, :lastName, :email)
 	end
 end

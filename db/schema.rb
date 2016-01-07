@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151223173942) do
+ActiveRecord::Schema.define(version: 20160105044955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,14 +21,15 @@ ActiveRecord::Schema.define(version: 20151223173942) do
     t.integer  "product_id"
     t.boolean  "purchased"
     t.float    "viewTime"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
     t.string   "productName"
     t.string   "price"
     t.text     "imageurl"
     t.string   "externalid"
     t.string   "detailPageUrl"
     t.integer  "supplier_id"
+    t.integer  "shared_activity_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -81,8 +82,9 @@ ActiveRecord::Schema.define(version: 20151223173942) do
     t.integer  "product_id"
     t.integer  "user_id"
     t.integer  "friend_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.integer  "activity_id"
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -105,6 +107,7 @@ ActiveRecord::Schema.define(version: 20151223173942) do
     t.string   "email"
     t.string   "encrypted_password"
     t.string   "salt"
+    t.string   "phone"
   end
 
 end
