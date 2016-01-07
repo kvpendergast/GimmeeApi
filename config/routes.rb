@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   patch '/v0/friendships/reject/:id', to: 'friendships#reject_friend_request'
   get '/v0/users/:id/friendships', to: 'users#friends'
   post '/v0/activities/share', to: 'activities#share'
+  post '/v0/users', to: 'users#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
