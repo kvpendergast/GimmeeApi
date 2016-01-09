@@ -13,13 +13,13 @@ class UsersController < ApplicationController
 	def create
 		user = User.new(user_params)
 		if user.save
-			render json: user, except: [:created_at, :updated_at, :encrypted_password], status: 201, location: user
+			render json: user.as_json.compact, except: [:created_at, :updated_at, :encrypted_password], status: 201, location: user
 		end
 	end
 
 	def show
 		@user = User.find(params[:id])
-		render json: @user
+		render json: @user.as_json.compact
 	end
 
 	def friends
@@ -49,7 +49,7 @@ class UsersController < ApplicationController
 			render json: response_hash
 		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
 			@user = User.find_by_facebook_id(user_params[:facebook_id])
-			render json: @user
+			render json: @user.as_json.compact
 		elsif @user.update(email: user_params[:email]) == false && user_params[:email] != nil
 			response_hash["email"] = "An account already exists with that email"
 			response_hash["id"] = @user.id
