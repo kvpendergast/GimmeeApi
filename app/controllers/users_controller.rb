@@ -32,6 +32,14 @@ class UsersController < ApplicationController
 		render json: productqueue_id
 	end
 
+	def update
+		@user = User.find(params[:id])
+		logger.info @user
+		@user.update!(user_params)
+
+		render json: status: 200	
+	end
+
 private
 	def user_params
 		params.permit(:firstName, :lastName, :email, :username, :phone)
