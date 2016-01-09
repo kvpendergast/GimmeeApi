@@ -34,10 +34,18 @@ class UsersController < ApplicationController
 
 	def update
 		@user = User.find(params[:id])
-		logger.info @user
-		@user.update!(user_params)
-
-		render nothing: true
+		response_hash = Hash.new
+		if @user.update(user_params)
+			response_hash["status"] = 200
+			response_hash["message"] = "User Successfully Created"
+			response_hash["id"] = @user.id
+			render json: response_hash, status: 200
+		else 
+			response_hash["status"] = 403
+			response_hash["message"] = "User already exists"
+			response_hash["id"] = User.find_by_facebook_id(user_params[:facebook_id]).id
+			render json: response_hash, status: 403
+		end
 	end
 
 private

@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 	validates_uniqueness_of :username, :case_sensitive => false, :allow_blank => true, :allow_null => true, :allow_nil => true
 	validates_uniqueness_of :email, :case_sensitive => false, :allow_blank => true, :allow_null => true, :allow_nil => true
 	validates_uniqueness_of :phone, :case_sensitive => false, :allow_blank => true, :allow_null => true, :allow_nil => true
+	validates_uniqueness_of :facebook_id, :case_sensitive => false, :allow_blank => true, :allow_null => true, :allow_nil => true
 
 	scope :first_created, -> { order("created_at").first }
   	scope :last_created, -> { order("created_at DESC").first }
