@@ -37,11 +37,21 @@ class UsersController < ApplicationController
 		logger.info @user
 		@user.update!(user_params)
 
-		render json: status: 200	
+		render nothing: true
 	end
 
 private
 	def user_params
-		params.permit(:firstName, :lastName, :email, :username, :phone)
+		params.permit(
+			:firstName, 
+			:lastName, 
+			:email, 
+			:username, 
+			:phone,
+			:facebook_id, 
+			:facebookAccessToken, 
+			:locale,
+			:timezone,
+			:age_range)
 	end
 end
