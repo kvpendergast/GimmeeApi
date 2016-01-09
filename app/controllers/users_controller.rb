@@ -52,6 +52,8 @@ private
 			:facebookAccessToken, 
 			:locale,
 			:timezone,
-			:age_range)
+			:age_min,
+			:age_max,
+			:gender)
 	end
 end
