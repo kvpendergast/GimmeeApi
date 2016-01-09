@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108235029) do
+ActiveRecord::Schema.define(version: 20160109011215) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -109,6 +109,11 @@ ActiveRecord::Schema.define(version: 20160108235029) do
     t.string   "encrypted_password"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "facebookAccessToken"
+    t.string   "gender"
+    t.string   "locale"
+    t.string   "timezone"
+    t.string   "age_range"
   end
 
 end
