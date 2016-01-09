@@ -36,9 +36,9 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		response_hash = Hash.new
 		if @user.update(user_params)
-			response_hash["message"] = "User Successfully Created"
+			response_hash["message"] = "No Profile Found"
 			response_hash["id"] = @user.id
-			render json: response_hash, status: 201
+			render json: response_hash
 		else 
 			#response_hash["status"] = 403
 			#response_hash["message"] = "User already exists"
