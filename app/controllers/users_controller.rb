@@ -39,9 +39,20 @@ class UsersController < ApplicationController
 			response_hash["message"] = "No Profile Found"
 			response_hash["id"] = @user.id
 			render json: response_hash
-		else 
-			@user.destroy
-			@user = User.find_by_facebook_id(user_params[:facebook_id]).to_json
+		elsif @user.update(username: user_params[:username]) == false && user_params[:username] != nil
+			response_hash["message"] = "Username already exists"
+			response_hash["id"] = @user.id
+			render json: response_hash
+		elsif @user.update(phone: user_params[:phone]) == false && user_params[:phone] != nil
+			response_hash["message"] = "An account already exists with that phone"
+			response_hash["id"] = @user.id
+			render json: response_hash
+		elsif @user.update(email: user_params[:email]) == false && user_params[:email] != nil
+			response_hash["email"] = "An account already exists with that email"
+			response_hash["id"] = @user.id
+			render json: response_hash
+		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
+			@user = User.find_by_facebook_id(user_params[:facebook_id])
 			render json: @user
 		end
 	end
