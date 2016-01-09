@@ -9,6 +9,7 @@ class FriendshipsController < ApplicationController
   end
 
   def create
+    logger.info friendship_params
     friendship = Friendship.create(friendship_params)
     friendship.accepted = false
     friendship.initiated_friendship = true
