@@ -40,9 +40,7 @@ class UsersController < ApplicationController
 			response_hash["id"] = @user.id
 			render json: response_hash
 		else 
-			#response_hash["status"] = 403
-			#response_hash["message"] = "User already exists"
-			#response_hash["user"] = User.find_by_facebook_id(user_params[:facebook_id]).to_json
+			@user.destroy
 			@user = User.find_by_facebook_id(user_params[:facebook_id]).to_json
 			render json: @user
 		end
