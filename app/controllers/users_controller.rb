@@ -47,13 +47,13 @@ class UsersController < ApplicationController
 			response_hash["message"] = "An account already exists with that phone"
 			response_hash["id"] = @user.id
 			render json: response_hash
+		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
+			@user = User.find_by_facebook_id(user_params[:facebook_id])
+			render json: @user
 		elsif @user.update(email: user_params[:email]) == false && user_params[:email] != nil
 			response_hash["email"] = "An account already exists with that email"
 			response_hash["id"] = @user.id
 			render json: response_hash
-		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
-			@user = User.find_by_facebook_id(user_params[:facebook_id])
-			render json: @user
 		end
 	end
 
