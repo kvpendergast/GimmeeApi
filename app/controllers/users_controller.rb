@@ -36,22 +36,22 @@ class UsersController < ApplicationController
 		@user = User.find(params[:id])
 		response_hash = Hash.new
 		if @user.update(user_params)
-			response_hash["message"] = "No Profile Found"
-			response_hash["id"] = @user.id
-			render json: response_hash
-		elsif @user.update(username: user_params[:username]) == false && user_params[:username] != nil
-			response_hash["message"] = "Username already exists"
-			response_hash["id"] = @user.id
-			render json: response_hash
-		elsif @user.update(phone: user_params[:phone]) == false && user_params[:phone] != nil
-			response_hash["message"] = "An account already exists with that phone"
+			response_hash["message"] = "matching_profile_not_found"
 			response_hash["id"] = @user.id
 			render json: response_hash
 		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
 			@user = User.find_by_facebook_id(user_params[:facebook_id])
 			render json: @user.as_json.compact
+		elsif @user.update(username: user_params[:username]) == false && user_params[:username] != nil
+			response_hash["message"] = "username_exists"
+			response_hash["id"] = @user.id
+			render json: response_hash
+		elsif @user.update(phone: user_params[:phone]) == false && user_params[:phone] != nil
+			response_hash["message"] = "phone_exists"
+			response_hash["id"] = @user.id
+			render json: response_hash
 		elsif @user.update(email: user_params[:email]) == false && user_params[:email] != nil
-			response_hash["email"] = "An account already exists with that email"
+			response_hash["email"] = "email_exists"
 			response_hash["id"] = @user.id
 			render json: response_hash
 		end
