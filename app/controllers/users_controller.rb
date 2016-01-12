@@ -41,7 +41,7 @@ class UsersController < ApplicationController
 			render json: response_hash
 		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
 			@user = User.find_by_facebook_id(user_params[:facebook_id])
-			render json: @user.as_json.compact, status: 400
+			render json: @user.as_json.compact, status: 200
 		elsif @user.update(username: user_params[:username]) == false && user_params[:username] != nil
 			response_hash["message"] = "username_exists"
 			response_hash["id"] = @user.id
