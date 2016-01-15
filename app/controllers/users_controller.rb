@@ -33,26 +33,34 @@ class UsersController < ApplicationController
 	end
 
 	def update
-		@user = User.find(params[:id])
+		user = User.find(params[:id])
 		response_hash = Hash.new
-		if @user.update(user_params)
+		logger.info user_params
+		user.assign_attributes(user_params)
+		user.valid?
+		logger.info user.errors.messages
+		logger.info "error check before logic"
+		if user.errors.empty?
+			user.save
+			logger.info user.errors.messages
 			response_hash["message"] = "matching_profile_not_found"
-			response_hash["id"] = @user.id
+			response_hash["id"] = user.id
 			render json: response_hash
-		elsif @user.update(facebook_id: user_params[:facebook_id]) == false && user_params[:facebook_id] != nil
-			@user = User.find_by_facebook_id(user_params[:facebook_id])
-			render json: @user.as_json.compact, status: 200
-		elsif @user.update(username: user_params[:username]) == false && user_params[:username] != nil
-			response_hash["message"] = "username_exists"
-			response_hash["id"] = @user.id
-			render json: response_hash, status: 400
-		elsif @user.update(phone: user_params[:phone]) == false && user_params[:phone] != nil
+		elsif user.errors.messages.include?(:facebook_id)
+			logger.info "Facebook logic worked"
+			user = User.find_by_facebook_id(user_params[:facebook_id])
+			render json: user.as_json.compact, status: 200
+		elsif user.errors.messages.include?(:phone)
 			response_hash["message"] = "phone_exists"
-			response_hash["id"] = @user.id
+			response_hash["id"] = user.id
 			render json: response_hash, status: 400
-		elsif @user.update(email: user_params[:email]) == false && user_params[:email] != nil
+		elsif user.errors.messages.include?(:username)
+			response_hash["message"] = "username_exists"
+			response_hash["id"] = user.id
+			render json: response_hash, status: 400
+		elsif user.errors.messages.include?(:email)
 			response_hash["message"] = "email_exists"
-			response_hash["id"] = @user.id
+			response_hash["id"] = user.id
 			render json: response_hash, status: 400
 		end
 	end
@@ -71,6 +79,8 @@ private
 			:timezone,
 			:age_min,
 			:age_max,
-			:gender)
+			:gender,
+			:id,
+			:user)
 	end
 end
