@@ -47,7 +47,6 @@ class UsersController < ApplicationController
 			response_hash["id"] = user.id
 			render json: response_hash
 		elsif user.errors.messages.include?(:facebook_id)
-			logger.info "Facebook logic worked"
 			user = User.find_by_facebook_id(user_params[:facebook_id])
 			render json: user.as_json.compact, status: 200
 		elsif user.errors.messages.include?(:username)
