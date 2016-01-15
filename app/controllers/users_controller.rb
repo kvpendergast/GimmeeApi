@@ -50,12 +50,12 @@ class UsersController < ApplicationController
 			logger.info "Facebook logic worked"
 			user = User.find_by_facebook_id(user_params[:facebook_id])
 			render json: user.as_json.compact, status: 200
-		elsif user.errors.messages.include?(:phone)
-			response_hash["message"] = "phone_exists"
-			response_hash["id"] = user.id
-			render json: response_hash, status: 400
 		elsif user.errors.messages.include?(:username)
 			response_hash["message"] = "username_exists"
+			response_hash["id"] = user.id
+			render json: response_hash, status: 400
+		elsif user.errors.messages.include?(:phone)
+			response_hash["message"] = "phone_exists"
 			response_hash["id"] = user.id
 			render json: response_hash, status: 400
 		elsif user.errors.messages.include?(:email)
