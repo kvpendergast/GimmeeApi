@@ -22,19 +22,14 @@ class QueuesController < ApplicationController
 	end
 
 	def create
-	  #Initializes a new queue
 	  @queue = Queue.new()
 
-	  #Initializes the array that will store the product ids for the queue
 	  new_product_ids = Array.new
 
-      #Initializes the array that will store the asins sent to amazon
       new_ids = Array.new
 
-	  #This loop makes sure that the productqueue has at least 50 products in it initially
 	  until new_product_ids.length >= 50
 		
-	  #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
 	    $count = 0
 	    new_ids.clear
 	    random_product = nil
@@ -90,13 +85,7 @@ class QueuesController < ApplicationController
 	  updated_queue_hash["productids"] = new_product_ids
 
 	  if @queue.save
-		#respond_to do |format|
-		#  format.html
-		#  format.xml { render :xml => response }
-		#  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
-		#end
 		render json: updated_queue_hash, status: 200, location: @queue
-		#render xml: response
 	  end
 	end
 
