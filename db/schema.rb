@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.datetime "updated_at",    null: false
     t.integer  "supplier_id"
     t.string   "price"
-    t.text     "imageurl"
     t.string   "externalId"
     t.string   "detailPageUrl"
     t.string   "tag"
@@ -92,11 +91,6 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.string   "supplierName"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-  end
-
-  create_table "temp_products", id: false, force: :cascade do |t|
-    t.text "asin"
-    t.text "tag"
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
