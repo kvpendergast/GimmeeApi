@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
 	scope :first_created, -> { order("created_at").first }
   	scope :last_created, -> { order("created_at DESC").first }
 
-	has_one :productqueue
+	has_one :queue
 	has_many :activities
 
 	has_many :friendships

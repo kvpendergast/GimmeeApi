@@ -1,10 +1,10 @@
-class ProductqueuesController < ApplicationController
+class QueuesController < ApplicationController
 
 	def index
-		productqueues = Productqueue.all
+		queues = Queue.all
 		queues_hash = Array.new
 		count = 0
-		productqueues.each do |row|
+		queues.each do |row|
 		  queues_hash[count]= {'queue_id' => row.id.to_s }
 		  queues_hash[count]['Tag'] = row.tag
 		  count += 1
@@ -13,18 +13,17 @@ class ProductqueuesController < ApplicationController
 	end
 
 	def show
-		@productqueue = Productqueue.find(params[:id])
-		render json: @productqueue
+		@queue = Queue.find(params[:id])
+		render json: @queue
 	end
 
 	def new
-		Productqueue.new
+		Queue.new
 	end
 
 	def create
-	  #Initializes a new productqueue
-	  @productqueue = Productqueue.new()
-	  logger.info @productqueue.id
+	  #Initializes a new queue
+	  @queue = Queue.new()
 
 	  #Initializes the array that will store the product ids for the queue
 	  new_product_ids = Array.new
@@ -58,57 +57,51 @@ class ProductqueuesController < ApplicationController
 	    end
 	  end
 	
-	  if @productqueue.save
-		render :json => @productqueue, status: 201, location: @productqueue
-		#render xml: response
-			#respond_to do |format|
-			#	format.html
-			#	format.xml { render :xml => response}
-			#	format.json { render :json => @productqueue, status: 201, location: @productqueue}
-			#end
+	  if @queue.save
+		render :json => @queue, status: 201, location: @queue
 	  end
 	end
 
 	def addproductstoqueue
-	  @productqueue = Productqueue.find(params[:id])
+	  @queue = Queue.find(params[:id])
 	  new_product_ids = Array.new
 	  request_asins = Array.new
 
-	  @productqueue.productids = [] if @productqueue.productids == nil
+	  @queue.productids = [] if @queue.productids == nil
 
 	  until new_product_ids.length >= 20
 				
 	    #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
-	    new_products = randomProduct(@productqueue.tag)
+	    new_products = randomProduct(@queue.tag)
 
 	    new_products.each do |item|
 	      if item.imageurl != nil
             new_product_ids.push(item.id)
-	  	    @productqueue.productids.push(item.id)
+	  	    @queue.productids.push(item.id)
 	      end
 	    end
       end
 
 	  updated_queue_hash = Hash.new
-	  updated_queue_hash["id"] = @productqueue.id
-      updated_queue_hash["user_id"] = @productqueue.user_id
+	  updated_queue_hash["id"] = @queue.id
+      updated_queue_hash["user_id"] = @queue.user_id
 	  updated_queue_hash["created_at"] = Time.now
 	  updated_queue_hash["updated_at"] = Time.now
 	  updated_queue_hash["productids"] = new_product_ids
 
-	  if @productqueue.save
+	  if @queue.save
 		#respond_to do |format|
 		#  format.html
 		#  format.xml { render :xml => response }
 		#  format.json { render :json => updated_queue_hash, status: 200, location: @productqueue}
 		#end
-		render json: updated_queue_hash, status: 200, location: @productqueue
+		render json: updated_queue_hash, status: 200, location: @queue
 		#render xml: response
 	  end
 	end
 
 private
-	def create_productqueue_params
-		#params.require(:productqueue).permit(:user_id)
+	def create_queue_params
+		
 	end
 end

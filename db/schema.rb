@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160109014855) do
+ActiveRecord::Schema.define(version: 20160119120042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,14 +58,6 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.uuid     "friend_id"
   end
 
-  create_table "productqueues", force: :cascade do |t|
-    t.integer  "user_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "productids", default: [],              array: true
-    t.string   "tag"
-  end
-
   create_table "products", force: :cascade do |t|
     t.string   "productName"
     t.integer  "user_id"
@@ -75,6 +67,12 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.string   "price"
     t.string   "externalId"
     t.string   "detailPageUrl"
+    t.string   "tag"
+  end
+
+  create_table "queues", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string   "tag"
   end
 
