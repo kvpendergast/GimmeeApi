@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120011010) do
+ActiveRecord::Schema.define(version: 20160120014407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,10 +50,10 @@ ActiveRecord::Schema.define(version: 20160120011010) do
   end
 
   create_table "channels", force: :cascade do |t|
-    t.integer  "queue_id"
-    t.integer  "user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "parent_channel_id"
+    t.uuid     "user_id"
   end
 
   create_table "friendships", force: :cascade do |t|
@@ -63,6 +63,14 @@ ActiveRecord::Schema.define(version: 20160120011010) do
     t.boolean  "initiated_friendship"
     t.uuid     "user_id"
     t.uuid     "friend_id"
+  end
+
+  create_table "parent_channels", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "title"
+    t.string   "image_url"
+    t.string   "tags"
   end
 
   create_table "products", force: :cascade do |t|
@@ -75,14 +83,6 @@ ActiveRecord::Schema.define(version: 20160120011010) do
     t.string   "externalId"
     t.string   "detailPageUrl"
     t.string   "tag"
-  end
-
-  create_table "queues", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string   "tag"
-    t.string   "image_url"
-    t.string   "title"
   end
 
   create_table "shared_activities", force: :cascade do |t|
