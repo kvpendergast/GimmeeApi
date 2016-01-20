@@ -27,9 +27,21 @@ class UsersController < ApplicationController
 		render json: friends
 	end
 
-	def productqueue
-		productqueue_id = User.find(params[:id]).productqueue
-		render json: productqueue_id
+	def parent_channels
+		channels = User.find(params[:id]).channels
+		response_hash = Hash.new
+		i = 0
+		channels.each do |chan|
+			response_hash[i] = chan.parent_channel
+			i++
+		end
+
+		render json: response_hash, status: 200s
+	end
+
+	def channels
+		channels = User.find(params[:id]).channels
+		render json: channels
 	end
 
 	def update
