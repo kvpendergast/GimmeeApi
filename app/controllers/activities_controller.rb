@@ -44,6 +44,6 @@ class ActivitiesController < ApplicationController
   end
   private
 	def activity_params
-	  params.require(:activity).permit(:user_id, :product_id)
+	  params.permit(:user_id, :product_id, :channel_id, :like, :gimmee, :view_time)
 	end
 end
