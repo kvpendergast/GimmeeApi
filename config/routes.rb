@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :users, :products, :suppliers, :activities, :friendships, :productqueues
   
+  resources :users do
+    resources :channels
+  end
+
   #Version 0
   get '/v0/products/:id', to: 'products#show'
   get '/v0/queues', to: 'queues#index'

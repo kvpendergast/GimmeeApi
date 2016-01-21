@@ -28,19 +28,19 @@ class UsersController < ApplicationController
 	end
 
 	def parent_channels
-		channels = User.find(params[:id]).channels
+		parent_channels = User.find(params[:id]).channels
 		response_hash = Hash.new
 		i = 0
-		channels.each do |chan|
+		parent_channels.each do |chan|
 			response_hash[i] = chan.parent_channel
-			i++
+			i = i + 1
 		end
 
-		render json: response_hash, status: 200s
+		render json: response_hash, status: 200
 	end
 
 	def channels
-		channels = User.find(params[:id]).channels
+		channels = User.find(params[:id]).channels.find_by_parent_channel_id(params[:parent_channel_id])
 		render json: channels
 	end
 
@@ -50,8 +50,6 @@ class UsersController < ApplicationController
 		logger.info user_params
 		user.assign_attributes(user_params)
 		user.valid?
-		logger.info user.errors.messages
-		logger.info "error check before logic"
 		if user.errors.empty?
 			user.save
 			logger.info user.errors.messages
