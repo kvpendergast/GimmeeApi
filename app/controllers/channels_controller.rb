@@ -14,7 +14,6 @@ class ChannelsController < ApplicationController
 	  channel = Channel.find(params[:id])
 
 	  #Pull products that have the same tag as that channel
-	  products = Product.find_by_tag(channel.tag)
 
 	  #Filter out products that have already been displayed
 	  response_hash = Hash.new

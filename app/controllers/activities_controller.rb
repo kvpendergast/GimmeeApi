@@ -11,11 +11,14 @@ class ActivitiesController < ApplicationController
 
   def create
 	  activity = Activity.create(activity_params)
+    logger.info activity.as_json
 	  json_hash = Hash.new
 	  if activity.save
 		  json_hash["activity_id"] = activity.id
-		  render json: json_hash, status: 201
+		  
 	  end
+
+    render json: json_hash, status: 201
   end
 
   def share

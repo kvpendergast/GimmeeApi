@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   get '/v0/parent_channels/users/:id', to: 'users#parent_channels'
   get '/v0/parent_channels/:parent_channel_id/users/:id', to: 'users#channels'
   get '/v0/channels/addproducts/:id', to: 'channels#addproducts'
-  post '/v0/activity', to: 'activity#create'
+  post '/v0/activities', to: 'activities#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
