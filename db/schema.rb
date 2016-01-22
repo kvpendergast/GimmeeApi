@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120123834) do
+ActiveRecord::Schema.define(version: 20160122013327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 20160120123834) do
     t.boolean  "gimmee"
     t.boolean  "like"
     t.float    "view_time"
+    t.integer  "channel_view_count"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -50,6 +51,7 @@ ActiveRecord::Schema.define(version: 20160120123834) do
     t.datetime "updated_at",        null: false
     t.integer  "parent_channel_id"
     t.uuid     "user_id"
+    t.integer  "view_count"
   end
 
   create_table "friendships", force: :cascade do |t|
