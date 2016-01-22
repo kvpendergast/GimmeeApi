@@ -26,23 +26,31 @@ class ChannelsController < ApplicationController
 	def add_products
 	  channel = Channel.find(params[:id])
 	  new_product_ids = Array.new
-	  request_asins = Array.new
 
-	  @productqueue.productids = [] if @productqueue.productids == nil
+	  channel.productids = [] if channel.productids == nil
+	  
+	  #check if any products with desired tag have activities with channel_viewed_count = channe.viewed_count
+	  products = Product.where(tag: channel.parent_channel.tag)
+	  products.each do |product|
+	  	if product.activities.last.channel_viewed_count < channel.viewed_count
+	  		new_product_ids.push(product.id)
+	  	end
+	  end
 
-	  until new_product_ids.length >= 20
+	  if new_product_ids != []
+	  	until new_product_ids.length >= 20
 				
-	    #This block of code randomly selects 10 product ASINs to be sent in the Amazon request
-	    new_products = randomProduct(@productqueue.tag)
+	    	#This block of code randomly selects 10 product ASINs to be sent in the Amazon request
+	    	new_products = randomProduct(@channel.parent_channel.tag)
 
-	    new_products.each do |item|
-	      if item.imageurl != nil
-            new_product_ids.push(item.id)
-	  	    @productqueue.productids.push(item.id)
-	      end
-	    end
+	    	new_products.each do |item|
+	      		if item.imageurl != nil
+            		new_product_ids.push(item.id)
+	  	    		Channel.productids.push(item.id)
+	      		end
+	    	end
+      	end
       end
-
 	  updated_queue_hash = Hash.new
 	  updated_queue_hash["id"] = @productqueue.id
       updated_queue_hash["user_id"] = @productqueue.user_id
