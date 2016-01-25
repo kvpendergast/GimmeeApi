@@ -182,6 +182,18 @@ _GET /productqueues/addproducts/:id_
 }
 ```
 
+_POST /v0/activities_
+```sh
+{
+  user_id: "####",                             --UUID
+  product_id: "####",                          --Integer
+  channel_id: "####",                          --Integer
+  gimmee: "true/false",                        --Boolean 
+  like: "true/false",                          --Boolean
+  view_time: "####",                           --float
+}
+```
+
 _POST /activities/share_
 ```sh
 {
