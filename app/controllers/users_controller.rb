@@ -40,7 +40,7 @@ class UsersController < ApplicationController
 	end
 
 	def channels
-		channels = User.find(params[:id]).channels.find_by_parent_channel_id(params[:parent_channel_id])
+		channels = User.find(params[:id]).channels
 		render json: channels
 	end
 

@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   get '/v0/channels/addproducts/:id', to: 'channels#addproducts'
   post '/v0/activities', to: 'activities#create'
   post '/v0/channels', to: 'channels#create'
+  get '/v0/users/:id/channels', to: 'users#channels'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

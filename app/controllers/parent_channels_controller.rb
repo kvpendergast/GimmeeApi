@@ -10,5 +10,4 @@ class ParentChannelsController < ApplicationController
 
 	def show
 	end
-
 end
