@@ -5,8 +5,8 @@ class ActivitiesController < ApplicationController
   end
 
   def show
-	user = User.find(params[:id])
-	render :json => user.to_json(:include => [:activities])
+	activity = Acitivity.find(params[:id])
+  render json: activity
   end
 
   def create

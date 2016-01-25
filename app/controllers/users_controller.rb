@@ -44,6 +44,12 @@ class UsersController < ApplicationController
 		render json: channels
 	end
 
+	def activities
+		user = User.find(params[:id])
+		activities = user.activities
+		render json: activities
+	end
+
 	def update
 		user = User.find(params[:id])
 		response_hash = Hash.new

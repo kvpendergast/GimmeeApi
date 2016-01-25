@@ -183,6 +183,8 @@ _GET /productqueues/addproducts/:id_
 ```
 
 _POST /v0/activities_
+
+**Request**
 ```sh
 {
   user_id: "####",                             --UUID
@@ -193,6 +195,32 @@ _POST /v0/activities_
   view_time: "####",                           --float
 }
 ```
+**Response**
+```sh
+{
+  activity_id: "####"                          --Integer
+}
+```
+
+_GET /v0/users/:id/activities_
+
+**Response**
+```sh
+{
+  "user_id": "####"                            --UUID
+  "id": 1                                      --Integer
+  "product_id": 1                              --Integer
+  "created_at": "2016-01-25T01:32:16.688Z"     --Date/Time
+  "updated_at": "2016-01-25T01:32:16.688Z"     --Date/Time
+  "shared_activity_id": null                   --Integer
+  "channel_id": 1                              --Integer
+  "gimmee": null                               --Boolean
+  "like": null                                 --Boolean
+  "view_time": null                            --Float
+  "channel_view_count": null                   --Integer
+}
+```
+
 
 _POST /activities/share_
 ```sh
