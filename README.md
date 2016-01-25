@@ -133,17 +133,18 @@ _GET /products/:id_
 ```
 This endpoint returns all productqueues and associated products.
 
-_GET /productqueues_
+_GET /v0/users/:id/channels_
+**response**
 ```sh
-["###"]
-0:  {
-  queue_id: "##"                             --Integer
-  Tag: "some_name"                           --String
-}
-
-1: {
-  queue:id: "##"                             --Integer
-  ...
+{
+  {
+    "user_id": "####",                     --UUID
+    "id": "##",                            --Integer
+    "created_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
+    "parent_channel_id": 1,                  --Integer
+    "view_count": "##"                       --Integer
+  }
 }
 ```
 This endpoint returns the parent channel info of the specified user's channels.
