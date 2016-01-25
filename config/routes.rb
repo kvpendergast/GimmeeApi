@@ -15,10 +15,11 @@ Rails.application.routes.draw do
   post '/v0/activities/share', to: 'activities#share'
   post '/v0/users', to: 'users#create'
   put '/v0/users/:id', to: 'users#update'
-  get '/v0/parent_channels/users/:id', to: 'users#parent_channels'
+  get '/v0/users/:id/parent_channels', to: 'users#parent_channels'
   get '/v0/parent_channels/:parent_channel_id/users/:id', to: 'users#channels'
   get '/v0/channels/addproducts/:id', to: 'channels#addproducts'
   post '/v0/activities', to: 'activities#create'
+  post '/v0/channels', to: 'channels#create'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -3,6 +3,10 @@ class ChannelsController < ApplicationController
 	end
 
 	def create
+		channel = Channel.create(channel_params)
+		if channel.save
+			render json: channel, status: 201
+		end
 	end
 
 	def new
@@ -66,5 +70,10 @@ class ChannelsController < ApplicationController
 		#end
 		render json: updated_queue_hash, status: 200, location: @productqueue
 		#render xml: response
+	  end
 	end
+	private
+		def channel_params
+			params.permit(:user_id, :parent_channel_id)
+		end
 end
