@@ -146,22 +146,23 @@ _GET /productqueues_
   ...
 }
 ```
-This endpoint returns the specified productqueue's info and product ids associated with that queue.
+This endpoint returns the parent channel info of the specified user's channels.
 
-_GET /productqueues/:id_
+_GET /v0/users/:id/parent\_channels_
+**response**
 ```sh
 {
-  id: "###"                                    --Integer
-  user_id: "###"                               --Integer
-  created_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
-  updated_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
-  productids: ["###"]                          --Integer
-  0:  "###"                                    --Integer
-  1:  "###"                                    --Integer
-  2:  "###"                                    --Integer
-  3:  "###"                                    --Integer
-  ...
-  tag: "Category Name"                         --String
+  { 
+    "id": "##",                              --Integer
+    "created_at": "YYYY-MM-DDTHH:MM:SS.395Z",--Date/Time
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.395Z",--Date/Time
+    "title": "some_title",                   --String
+    "image_url": "Some_url",                 --String
+    "tags": ""                               --Hash
+  }
+  {
+    ...
+  }
 }
 ```
 This endpoint adds products to the specified productqueue and then returns the productqueue info and the newly added products.
