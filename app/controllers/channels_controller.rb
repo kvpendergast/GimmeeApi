@@ -30,30 +30,28 @@ class ChannelsController < ApplicationController
 	def add_products
 	  #Save channel to a variable
 	  channel = Channel.find(params["id"])
-
 	  #Pull products that have that channel's tag
-	  channel_products = Product.where(tag: channel.tag)
+	  channel_products = Product.where(tag: channel.parent_channel.tags)
+	  logger.info channel_products.as_json
 	  new_products = Array.new
+	  Product.uncached do
 	  channel_products.each do |product|
-	  	viewed = false
-	  	product.activities.each do |activity|
-	  	  if activity.last.channel_view_count == channel.view_count
-	  	  	viewed = true
+	  	  viewed = false
+	  	  if product.activities.last.channel_view_count == channel.view_count
+	  	  	  viewed = true
 	  	  end
-	  	end
-	  	if viewed == false
-	  		new_products.push(product.id)
-	  	end
+	  	  if viewed == false
+	  	  	  new_products.push(product.id)
+	  	  end
+	    end
 	  end
-
 	  if new_products.empty?
-	  	render json: "No more products"
+	  	response_hash = Hash.new
+	  	response_hash["message"] = "channel_end"
+	  	render json: response_hash
 	  else
 	  	render json: new_products
 	  end
-
-
-
 	end
 	private
 		def channel_params
