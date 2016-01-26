@@ -53,6 +53,14 @@ class ChannelsController < ApplicationController
 	  	render json: new_products
 	  end
 	end
+
+	def view_count
+		channel = Channel.find(params[:id])
+		channel.view_count += 1
+		channel.save
+		render json: channel, status: 200
+	end
+
 	private
 		def channel_params
 			params.permit(:user_id, :parent_channel_id)

@@ -21,6 +21,7 @@ Rails.application.routes.draw do
   post '/v0/activities', to: 'activities#create'
   post '/v0/channels', to: 'channels#create'
   get '/v0/users/:id/channels', to: 'users#channels'
+  put '/v0/channels/:id/view_count', to: 'channels#view_count'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
