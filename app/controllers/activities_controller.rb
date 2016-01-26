@@ -11,11 +11,10 @@ class ActivitiesController < ApplicationController
 
   def create
 	  activity = Activity.create(activity_params)
-    logger.info activity.as_json
+    activity.view_count = activity.channel.channel_view_count
 	  json_hash = Hash.new
 	  if activity.save
-		  json_hash["activity_id"] = activity.id
-		  
+		  json_hash["activity_id"] = activity.id  
 	  end
 
     render json: json_hash, status: 201
@@ -24,12 +23,9 @@ class ActivitiesController < ApplicationController
   def share
   	activity = Activity.find(params[:activity_id])
   	json_hash = Hash.new
-    logger.info "Works"
   	shared_activity = SharedActivity.create(activity_id: params[:activity_id], 
   		product_id: params[:product_id], 
   		user_id: params[:user_id])
-    logger.info params[:friend_ids].to_json
-    logger.info "Did anything show?"
   	json_hash["shared_activity"] = shared_activity
     json_hash["reverse_activities"] = Array.new
   	friend_ids = params[:friend_ids]
