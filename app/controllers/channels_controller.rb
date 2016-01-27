@@ -35,13 +35,16 @@ class ChannelsController < ApplicationController
 	  logger.info channel_products.as_json
 	  new_products = Array.new
 	  Product.uncached do
-	  channel_products.each do |product|
+	    channel_products.each do |product|
 	  	  viewed = false
-	  	  if product.activities.last.channel_view_count == channel.view_count
+	  	  logger.info product.as_json
+	  	  if !product.activities.where(channel_id: channel.id).last.nil?
+	  	    if product.activities.where(channel_id: channel.id).last.channel_view_count == channel.view_count
 	  	  	  viewed = true
-	  	  end
-	  	  if viewed == false
+	  	    end
+	  	    if viewed == false
 	  	  	  new_products.push(product.id)
+	  	    end
 	  	  end
 	    end
 	  end
