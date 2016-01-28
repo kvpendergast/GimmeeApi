@@ -27,9 +27,27 @@ class UsersController < ApplicationController
 		render json: friends
 	end
 
-	def productqueue
-		productqueue_id = User.find(params[:id]).productqueue
-		render json: productqueue_id
+	def parent_channels
+		parent_channels = User.find(params[:id]).channels
+		response_hash = Hash.new
+		i = 0
+		parent_channels.each do |chan|
+			response_hash[i] = chan.parent_channel
+			i = i + 1
+		end
+
+		render json: response_hash, status: 200
+	end
+
+	def channels
+		channels = User.find(params[:id]).channels
+		render json: channels
+	end
+
+	def activities
+		user = User.find(params[:id])
+		activities = user.activities
+		render json: activities
 	end
 
 	def update
@@ -38,8 +56,6 @@ class UsersController < ApplicationController
 		logger.info user_params
 		user.assign_attributes(user_params)
 		user.valid?
-		logger.info user.errors.messages
-		logger.info "error check before logic"
 		if user.errors.empty?
 			user.save
 			logger.info user.errors.messages

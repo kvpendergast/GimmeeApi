@@ -1,20 +1,27 @@
 Rails.application.routes.draw do
   resources :users, :products, :suppliers, :activities, :friendships, :productqueues
   
+  resources :users do
+    resources :channels
+  end
+
   #Version 0
-  get '/v0/products', to: 'products#index'
   get '/v0/products/:id', to: 'products#show'
-  get '/v0/productqueues', to: 'productqueues#index'
-  get '/v0/productqueues/:id', to: 'productqueues#show'
-  get '/v0/users/:id/activities', to: 'activities#show'
-  get '/v0/users/:id/productqueues', to: 'users#productqueue'
-  get '/v0/productqueues/addproducts/:id', to: 'productqueues#addproductstoqueue'
+  get '/v0/users/:id/activities', to: 'users#activities'
+  get '/v0/queues/addproducts/:id', to: 'productqueues#addproductstoqueue'
   patch '/v0/friendships/accept/:id', to: 'friendships#accept_friend_request'
   patch '/v0/friendships/reject/:id', to: 'friendships#reject_friend_request'
   get '/v0/users/:id/friendships', to: 'users#friends'
   post '/v0/activities/share', to: 'activities#share'
   post '/v0/users', to: 'users#create'
   put '/v0/users/:id', to: 'users#update'
+  get '/v0/users/:id/parent_channels', to: 'users#parent_channels'
+  get '/v0/parent_channels/:parent_channel_id/users/:id', to: 'users#channels'
+  get '/v0/channels/add_products/:id', to: 'channels#add_products'
+  post '/v0/activities', to: 'activities#create'
+  post '/v0/channels', to: 'channels#create'
+  get '/v0/users/:id/channels', to: 'users#channels'
+  put '/v0/channels/:id/view_count', to: 'channels#view_count'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

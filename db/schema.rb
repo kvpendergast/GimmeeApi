@@ -11,26 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160109014855) do
+ActiveRecord::Schema.define(version: 20160122013327) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
 
   create_table "activities", force: :cascade do |t|
-    t.integer  "user_id"
     t.integer  "product_id"
-    t.boolean  "purchased"
-    t.float    "viewTime"
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
-    t.string   "productName"
-    t.string   "price"
-    t.text     "imageurl"
-    t.string   "externalid"
-    t.string   "detailPageUrl"
-    t.integer  "supplier_id"
     t.integer  "shared_activity_id"
+    t.integer  "channel_id"
+    t.uuid     "user_id"
+    t.boolean  "gimmee"
+    t.boolean  "like"
+    t.float    "view_time"
+    t.integer  "channel_view_count"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -49,6 +46,14 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.integer  "child_id"
   end
 
+  create_table "channels", force: :cascade do |t|
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.integer  "parent_channel_id"
+    t.uuid     "user_id"
+    t.integer  "view_count"
+  end
+
   create_table "friendships", force: :cascade do |t|
     t.datetime "created_at",                           null: false
     t.datetime "updated_at",                           null: false
@@ -58,12 +63,12 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.uuid     "friend_id"
   end
 
-  create_table "productqueues", force: :cascade do |t|
-    t.integer  "user_id"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.integer  "productids", default: [],              array: true
-    t.string   "tag"
+  create_table "parent_channels", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "title"
+    t.string   "image_url"
+    t.string   "tags"
   end
 
   create_table "products", force: :cascade do |t|
@@ -73,7 +78,6 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.datetime "updated_at",    null: false
     t.integer  "supplier_id"
     t.string   "price"
-    t.text     "imageurl"
     t.string   "externalId"
     t.string   "detailPageUrl"
     t.string   "tag"
@@ -92,11 +96,6 @@ ActiveRecord::Schema.define(version: 20160109014855) do
     t.string   "supplierName"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-  end
-
-  create_table "temp_products", id: false, force: :cascade do |t|
-    t.text "asin"
-    t.text "tag"
   end
 
   create_table "users", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|

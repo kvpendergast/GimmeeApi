@@ -133,35 +133,37 @@ _GET /products/:id_
 ```
 This endpoint returns all productqueues and associated products.
 
-_GET /productqueues_
-```sh
-["###"]
-0:  {
-  queue_id: "##"                             --Integer
-  Tag: "some_name"                           --String
-}
-
-1: {
-  queue:id: "##"                             --Integer
-  ...
-}
-```
-This endpoint returns the specified productqueue's info and product ids associated with that queue.
-
-_GET /productqueues/:id_
+_GET /v0/users/:id/channels_
+**response**
 ```sh
 {
-  id: "###"                                    --Integer
-  user_id: "###"                               --Integer
-  created_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
-  updated_at: "2015-11-10T00:07:53.270+00:00"  --Date/Time
-  productids: ["###"]                          --Integer
-  0:  "###"                                    --Integer
-  1:  "###"                                    --Integer
-  2:  "###"                                    --Integer
-  3:  "###"                                    --Integer
-  ...
-  tag: "Category Name"                         --String
+  {
+    "user_id": "####",                     --UUID
+    "id": "##",                            --Integer
+    "created_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
+    "parent_channel_id": 1,                  --Integer
+    "view_count": "##"                       --Integer
+  }
+}
+```
+This endpoint returns the parent channel info of the specified user's channels.
+
+_GET /v0/users/:id/parent\_channels_
+**response**
+```sh
+{
+  { 
+    "id": "##",                              --Integer
+    "created_at": "YYYY-MM-DDTHH:MM:SS.395Z",--Date/Time
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.395Z",--Date/Time
+    "title": "some_title",                   --String
+    "image_url": "Some_url",                 --String
+    "tags": ""                               --Hash
+  }
+  {
+    ...
+  }
 }
 ```
 This endpoint adds products to the specified productqueue and then returns the productqueue info and the newly added products.
@@ -181,6 +183,46 @@ _GET /productqueues/addproducts/:id_
   ...
 }
 ```
+
+_POST /v0/activities_
+
+**Request**
+```sh
+{
+  user_id: "####",                             --UUID
+  product_id: "####",                          --Integer
+  channel_id: "####",                          --Integer
+  gimmee: "true/false",                        --Boolean 
+  like: "true/false",                          --Boolean
+  view_time: "####",                           --float
+}
+```
+**Response**
+```sh
+{
+  activity_id: "####"                          --Integer
+}
+```
+
+_GET /v0/users/:id/activities_
+
+**Response**
+```sh
+{
+  "user_id": "####"                            --UUID
+  "id": 1                                      --Integer
+  "product_id": 1                              --Integer
+  "created_at": "2016-01-25T01:32:16.688Z"     --Date/Time
+  "updated_at": "2016-01-25T01:32:16.688Z"     --Date/Time
+  "shared_activity_id": null                   --Integer
+  "channel_id": 1                              --Integer
+  "gimmee": null                               --Boolean
+  "like": null                                 --Boolean
+  "view_time": null                            --Float
+  "channel_view_count": null                   --Integer
+}
+```
+
 
 _POST /activities/share_
 ```sh

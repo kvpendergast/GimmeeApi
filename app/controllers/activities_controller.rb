@@ -5,28 +5,27 @@ class ActivitiesController < ApplicationController
   end
 
   def show
-	user = User.find(params[:id])
-	render :json => user.to_json(:include => [:activities])
+	activity = Acitivity.find(params[:id])
+  render json: activity
   end
 
   def create
 	  activity = Activity.create(activity_params)
+    activity.view_count = activity.channel.channel_view_count
 	  json_hash = Hash.new
 	  if activity.save
-		  json_hash["activity_id"] = activity.id
-		  render json: json_hash, status: 201
+		  json_hash["activity_id"] = activity.id  
 	  end
+
+    render json: json_hash, status: 201
   end
 
   def share
   	activity = Activity.find(params[:activity_id])
   	json_hash = Hash.new
-    logger.info "Works"
   	shared_activity = SharedActivity.create(activity_id: params[:activity_id], 
   		product_id: params[:product_id], 
   		user_id: params[:user_id])
-    logger.info params[:friend_ids].to_json
-    logger.info "Did anything show?"
   	json_hash["shared_activity"] = shared_activity
     json_hash["reverse_activities"] = Array.new
   	friend_ids = params[:friend_ids]
@@ -44,6 +43,6 @@ class ActivitiesController < ApplicationController
   end
   private
 	def activity_params
-	  params.require(:activity).permit(:user_id, :product_id)
+	  params.permit(:user_id, :product_id, :channel_id, :like, :gimmee, :view_time)
 	end
 end
