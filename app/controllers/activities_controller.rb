@@ -11,7 +11,7 @@ class ActivitiesController < ApplicationController
 
   def create
 	  activity = Activity.create(activity_params)
-    activity.view_count = activity.channel.view_count
+    activity.channel_view_count = activity.channel.view_count
 	  json_hash = Hash.new
 	  if activity.save
 		  json_hash["activity_id"] = activity.id  
