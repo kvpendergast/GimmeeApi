@@ -11,10 +11,16 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		user = User.new(user_params)
-		if user.save
-			render json: user.as_json.compact, except: [:created_at, :updated_at, :encrypted_password], status: 201, location: user
+	  user = User.new(user_params)
+	  if user.save
+		render json: user.as_json.compact, except: [:created_at, :updated_at, :encrypted_password], status: 201, location: user
+	  end
+
+	  ParentChannel.all.each do |parent_channel|
+	  	if parent_channel.default == true
+		  Channel.create(parent_channel_id: parent_channel.id, user_id: user.id)
 		end
+	  end
 	end
 
 	def show
