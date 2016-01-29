@@ -61,6 +61,8 @@ This endpoint creates a user
 
 _POST /users_
 
+**This endpoint creates a user and returns the details of the newly created user. When a user is created, default channels are automatically created for that user based on parent channels that have the `default` field set to `TRUE`.
+
 *Payload*
 ```sh
 {
@@ -87,7 +89,7 @@ _POST /users_
 }
 ```
 
-This endpoint returns all products in the Ventry database and each product's info.
+This endpoint returns all products in the Gimmee database and each product's info.
 
 _GET /products_
 ```sh
@@ -131,19 +133,19 @@ _GET /products/:id_
 }
 
 ```
-This endpoint returns all productqueues and associated products.
+This endpoint returns all channels for a specified user.
 
 _GET /v0/users/:id/channels_
 **response**
 ```sh
 {
   {
-    "user_id": "####",                     --UUID
-    "id": "##",                            --Integer
-    "created_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
-    "updated_at": "YYYY-MM-DDTHH:MM:SS.353Z",--Date/Time
-    "parent_channel_id": 1,                  --Integer
-    "view_count": "##"                       --Integer
+    "user_id": "####",                            --UUID
+    "id": "##",                                   --Integer
+    "created_at": "YYYY-MM-DDTHH:MM:SS.353Z",     --Date/Time
+    "updated_at": "YYYY-MM-DDTHH:MM:SS.353Z",     --Date/Time
+    "parent_channel_id": 1,                       --Integer
+    "view_count": "##"                            --Integer
   }
 }
 ```
@@ -166,16 +168,11 @@ _GET /v0/users/:id/parent\_channels_
   }
 }
 ```
-This endpoint adds products to the specified productqueue and then returns the productqueue info and the newly added products.
+This endpoint adds products to the specified channel and then returns the ids of the newly added products.
 
-_GET /productqueues/addproducts/:id_
+_GET /v0/channels/addproducts/:id_
 ```sh
 {
-  id: "###"                                    --Integer
-  user_id: "###"                               --Integer
-  created_at: "2015-11-10T00:45:18.239+00:00"  --Date/Time
-  updated_at: "2015-11-10T00:45:18.239+00:00"  --Date/Time
-  productids: ["###"]
   0:  "###"                                    --Integer
   1:  "###"                                    --Integer
   2:  "###"                                    --Integer
@@ -195,6 +192,7 @@ _POST /v0/activities_
   gimmee: "true/false",                        --Boolean 
   like: "true/false",                          --Boolean
   view_time: "####",                           --float
+  channel_view_count: "##"                     --Integer
 }
 ```
 **Response**
