@@ -170,7 +170,7 @@ _GET /v0/users/:id/parent\_channels_
 ```
 This endpoint adds products to the specified channel and then returns the ids of the newly added products.
 
-_GET /v0/channels/addproducts/:id_
+_GET /v0/channels/add_products/:id_
 ```sh
 {
   0:  "###"                                    --Integer
