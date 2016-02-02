@@ -47,7 +47,14 @@ class UsersController < ApplicationController
 
 	def channels
 		channels = User.find(params[:id]).channels
-		render json: channels
+		response_hash = Hash.new
+		i = 0
+		channels.each do |chan|
+			response_hash[i] = chan.parent_channel
+			response_hash[i].id = chan.id
+			i = i + 1
+		end
+		render json: response_hash
 	end
 
 	def activities
