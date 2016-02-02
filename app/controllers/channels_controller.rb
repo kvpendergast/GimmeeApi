@@ -57,6 +57,7 @@ class ChannelsController < ApplicationController
 	      end
 	    end
 	  end
+	  new_products.shuffle!
 	  if new_products.length < 20
 	  	response_hash = Hash.new
 	  	response_hash["productList"] = new_products
