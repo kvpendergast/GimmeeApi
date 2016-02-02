@@ -51,16 +51,21 @@ class ChannelsController < ApplicationController
 	  	  	    new_products.push(product.id)
 	  	      end
 	  	    end
+	  	    if new_products.length == 20
+	  	    	break
+	  	    end
 	      end
 	    end
 	  end
-	  if new_products.empty?
+	  if new_products.length < 20
 	  	response_hash = Hash.new
-	  	response_hash["message"] = "channel_end"
-	  	render json: response_hash
+	  	response_hash["productList"] = new_products
+	  	response_hash["channelEnd"] = true
 	  else
-	  	render json: new_products
+	  	response_hash["productList"] = new_products
+	  	response_hash["channelEnd"] = false
 	  end
+	  render json: response_hash
 	end
 
 	def view_count
