@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160129024414) do
+ActiveRecord::Schema.define(version: 20160204114042) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20160129024414) do
     t.string   "image_url"
     t.string   "tags"
     t.boolean  "default"
+    t.string   "subtitle"
   end
 
   create_table "products", force: :cascade do |t|
