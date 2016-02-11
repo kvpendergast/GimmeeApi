@@ -61,6 +61,10 @@ class UsersController < ApplicationController
 			response_array[i].merge!(intermediate_hash).compact!
 			i = i + 1
 		end
+
+		element_to_add = response_array.select {|element| element["tags"] == "#gimmee"}
+		response_array.delete_if {|e| e["tags"] == "#gimmee"}
+		response_array.unshift(element_to_add)
 		render json: response_array.compact.to_json
 	end
 
