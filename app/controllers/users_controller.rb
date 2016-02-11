@@ -47,14 +47,21 @@ class UsersController < ApplicationController
 
 	def channels
 		channels = User.find(params[:id]).channels
-		response_hash = Hash.new
+		response_array = Array.new
 		i = 0
 		channels.each do |chan|
-			response_hash[i] = chan.parent_channel
-			response_hash[i].id = chan.id
+			response_array[i] = Hash.new
+			response_array[i] = chan.parent_channel.as_json
+			response_array[i].delete("created_at")
+			response_array[i].delete("updated_at")
+			response_array[i][:id] = chan.id
+
+			intermediate_hash = Hash.new
+			intermediate_hash[:parent_channel_id] = chan.parent_channel.id
+			response_array[i].merge!(intermediate_hash).compact!
 			i = i + 1
 		end
-		render json: response_hash
+		render json: response_array.compact.to_json
 	end
 
 	def activities
