@@ -43,12 +43,14 @@ class ChannelsController < ApplicationController
 	    	channel_products.each do |product|
 	  	  	viewed = false
 	  	  	if !product.activities.where(channel_id: channel.id).last.nil?
-	  	      if product.activities.where(channel_id: channel.id).last.channel_view_count == channel.view_count
+	  	      if product.activities.where(channel_id: channel.id).last.channel_view_count == channel.view_count 
 	  	  		viewed = true
 	  	      end
 	  	      if viewed == false
 	  	  	    new_products.push(product.id)
 	  	      end
+	  	    else
+	  	      new_products.push(product.id)
 	  	    end
 	  	    if new_products.length == 20
 	  	    	break
