@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 
 	  ParentChannel.all.each do |parent_channel|
 	  	if parent_channel.default == true
-		  Channel.create(parent_channel_id: parent_channel.id, user_id: user.id)
+		  Channel.create(parent_channel_id: parent_channel.id, user_id: user.id, view_count: 1)
 		end
 	  end
 	end

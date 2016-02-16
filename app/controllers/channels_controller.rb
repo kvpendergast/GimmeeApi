@@ -4,6 +4,7 @@ class ChannelsController < ApplicationController
 
 	def create
 		channel = Channel.create(channel_params)
+		channel.view_count = 1
 		if channel.save
 			render json: channel, status: 201
 		end
@@ -32,17 +33,15 @@ class ChannelsController < ApplicationController
 	  channel = Channel.find(params["id"])
 	  #Pull products that have that channel's tag
 	  channel_products = Product.where(tag: channel.parent_channel.tags)
-	  logger.info channel_products.as_json
 	  new_products = Array.new
 	  if channel.view_count == 0
 	  	channel_products.each do |product|
-	  	  new_products.push(product.id)
+	  	  new_products.push(product.id) if new_products.length < 20
 	  	end
 	  else
 	  	Product.uncached do
 	    	channel_products.each do |product|
 	  	  	viewed = false
-	  	  	logger.info product.as_json
 	  	  	if !product.activities.where(channel_id: channel.id).last.nil?
 	  	      if product.activities.where(channel_id: channel.id).last.channel_view_count == channel.view_count
 	  	  		viewed = true
@@ -58,8 +57,8 @@ class ChannelsController < ApplicationController
 	    end
 	  end
 	  new_products.shuffle!
+	  response_hash = Hash.new
 	  if new_products.length < 20
-	  	response_hash = Hash.new
 	  	response_hash["productList"] = new_products
 	  	response_hash["channelEnd"] = true
 	  else
